@@ -13,7 +13,31 @@ import javax.persistence.Table;
 @Table(name="ANUNCIO")
 public class Anuncio {
  
-    @Id
+    public String getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(String nivel) {
+		this.nivel = nivel;
+	}
+
+	public int getTarifa() {
+		return tarifa;
+	}
+
+	public void setTarifa(int tarifa) {
+		this.tarifa = tarifa;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	@Id
     @Column(name="NIVEL")
     private String nivel;
     
