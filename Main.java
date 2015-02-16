@@ -32,11 +32,17 @@ public class Main {
 	    Categoria subcategoria2 = new Categoria("internacionales");
 	 
 	    //Usuario1 tiene dos promociones adquiridas
-	    Usuario1.getPromocion().add(promo1);
-	    Usuario1.getPromocion().add(promo2);
+	    Usuario1.getPromociones().add(promo1);
+	    Usuario1.getPromociones().add(promo2);
 	    
 	    //usuario2 tiene una promocion adquirida
-	    Usuario2.getPromocion().add(promo2);
+	    Usuario2.getPromociones().add(promo2);
+	    
+	    //Usuario3 tiene dos amigos
+	    Usuario1.getAmigos().add(Usuario3);
+	    Usuario2.getAmigos().add(Usuario3);
+	    //Usuario3.getAmigos().add(Usuario2);
+	    //Usuario3.getAmigos().add(Usuario1);
 	    
 	    //categoria1 con dos subcategorias
 	    subcategoria2.setSuperCategoria(categoria1);

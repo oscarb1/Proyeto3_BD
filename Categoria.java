@@ -21,11 +21,11 @@ public class Categoria {
      
     //El rol Super Categoria
     @ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name="superCategoria") //Owner de la relación es el manager
+    @JoinColumn(name="superCategoria") //Owner de la relación es superCategoria
     private Categoria superCategoria;
  
-    //El rol del subordinado (Al subordinado lo dirige un supervisor) Uno a muchos
-    @OneToMany(mappedBy="superCategoria") //Mapeado desde el manager que es el owner de la relación
+    //El rol desubCategoria que depente de una supercategoria Uno a muchos
+    @OneToMany(mappedBy="superCategoria") //Mapeado desde el superCategoria que es el owner de la relación
     private Set<Categoria> subcategorias = new HashSet<Categoria>();
 
     public Categoria (String nombre){

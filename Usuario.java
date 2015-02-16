@@ -1,6 +1,6 @@
 import java.util.HashSet;
 import java.util.Set;
- 
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -60,8 +62,21 @@ public class Usuario {
                 joinColumns={@JoinColumn(name="USERNAME")}, //username USUARIO
                 inverseJoinColumns={@JoinColumn(name="PROMOCOD")}) //ID de la PROMOCION
    
+
+
+    //Lista de promociones que ha adquirido el usuario
     private Set<Promocion> promociones = new HashSet<Promocion>();
     
+    
+    @ManyToMany(cascade={CascadeType.ALL})
+    @JoinTable(name="AMIGOS",
+        joinColumns={@JoinColumn(name="USERNAME")},
+        inverseJoinColumns={@JoinColumn(name="USERNAME_AMIGO")})
+    private Set<Usuario> amigos = new HashSet<Usuario>();
+
+    @ManyToMany(mappedBy="amigos")
+    private Set<Usuario> listaAmigos = new HashSet<Usuario>();
+
     
     
     public String getUsername() {
@@ -105,12 +120,29 @@ public class Usuario {
 	}
 
 
-	public Set<Promocion> getPromocion() {
+	public Set<Usuario> getListaAmigos() {
+		return listaAmigos;
+	}
+
+	public void setListaAmigos(Set<Usuario> listaAmigos) {
+		this.listaAmigos = listaAmigos;
+	}
+
+	public Set<Usuario> getAmigos() {
+		return amigos;
+	}
+
+	public void setAmigos(Set<Usuario> amigos) {
+		this.amigos = amigos;
+	}
+
+	public Set<Promocion> getPromociones() {
 		return promociones;
 	}
 
-	public void setPromocion(Set<Promocion> promociones) {
+	public void setPromociones(Set<Promocion> promociones) {
 		this.promociones = promociones;
 	}
+
     
 }

@@ -199,12 +199,5 @@ public class Promocion {
 	}
 
 
-	public Set<Usuario> getUsuario() {
-		return usuarios;
-	}
-
-	public void setUsuario(Set<Usuario> usuarios) {
-		this.usuarios = usuarios;
-	}
    
 }
