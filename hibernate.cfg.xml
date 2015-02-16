@@ -35,6 +35,8 @@
         <mapping class="Usuario"/>
         <mapping class="Promocion"/>
         <mapping class="Categoria"/>
+        <mapping class="Anuncio"/>
+        <mapping class="Empresa"/>
  
     </session-factory>
 
