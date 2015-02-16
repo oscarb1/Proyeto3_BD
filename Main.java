@@ -1,3 +1,5 @@
+import java.util.Date;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -12,8 +14,11 @@ public class Main {
 		session.beginTransaction();
 	   
 		//Promociones
-		Promocion promo1 = new Promocion("Promocion Margarita");
-	    Promocion promo2 = new Promocion("Promocion almuerzo comidaRapida");
+		
+		//Una fecha para probar
+		Date date = new Date();
+		Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date, "estas son las condi", 300, 3, "/imagen/margara","www.viajaMarga.com","etiq");
+		Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date, "estas son las condi sushi", 100, 2, "/imagen/sushi","www.compraSushi.com","etiq2");
 	    
 	    //Usuarios
 	    Usuario Usuario1 = new Usuario("pedroA", "pedroAndrade@gmail.com", "Pedro", "Andrade");
@@ -48,3 +53,4 @@ public class Main {
 	}
 
 }
+
