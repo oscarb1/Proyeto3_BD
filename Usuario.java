@@ -2,9 +2,9 @@
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.*;
-
+import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
 
 /**
 * Clase Usuario 
@@ -18,27 +18,48 @@ import javax.persistence.*;
 @Table(name="USUARIO")
 public class Usuario {
 	
-// Atributos de la clase ********************************
+// Atributos de la clase ***************************************
 	
-	// Nombre del usuario en el portal. 
+	// Nombre del usuario en el portal. ****
     @Id
-    @Column(name="USERNAME")
+    @Column(name="USERNAME", nullable = false)
+    @Size(
+    		min = 3, 
+    		max = 15, 
+    		message = "El nombre de usuario debe estar entre 3 y 15 caracteres")
     private String username;
     
-    // Correo electrónico del usuario.  
-	@Column(name="CORREO")
+    // Correo electrónico del usuario. *****
+	@Column(name="CORREO", nullable = false)
+	@Email( // Verifica que la dirección de correo sea válida
+			message = "La dirección de correo '${validatedValue}' debe ser válida")
+	@Size(
+			min = 13, 
+			max = 30, 
+			message = "La dirección de correo '${validatedValue}' debe estar entre {min} y {max} caracteres")
     private String correo;
      
-	// Primer nombre del usuario.
-    @Column(name="NOMBRE")
+	// Primer nombre del usuario. *********
+    @Column(name="NOMBRE", nullable = false)
+    @Size(
+    		min = 2, 
+    		max = 17, 
+    		message = "El nombre del usuario '${validatedValue}' debe estar entre {min} y {max} caracteres.")
     private String nombre;
     
-    // Primer apellido del usuario.
-    @Column(name="APELLIDO")
+    // Primer apellido del usuario. *******
+    @Column(name="APELLIDO", nullable = false)
+    @Size(
+    		min = 2, 
+    		max = 17, 
+    		message = "El apellido del usuario '${validatedValue}' debe estar entre {min} y {max} caracteres")
     private String apellido;
     
     // Cantidad de dinero virtual que ha ganado el usuario.
-    @Column(name="DINERO_PROMOCION")
+    @Column(name="DINERO_PROMOCION", nullable = false)
+    @Min(
+    		value = 0, 
+    		message = "El dinero promoción debe ser positivo")
     private int dinero_promocion;
     
     // Constructor de la clase
@@ -50,6 +71,9 @@ public class Usuario {
         this.dinero_promocion = 0;
     } // Cierre del constructor
 
+    
+// Asociaciones ****************************************************
+    
 	/*
      * @ManyToMany – Is used to create many-to-many relationship between Employee and Meeting entities. 
      * If the Collection is defined using generics to specify the element type, the associated target 
@@ -89,7 +113,7 @@ public class Usuario {
     private Set<Usuario> listaAmigos = new HashSet<Usuario>();
 
     
-// Getters and Setters **********************************
+// Getters and Setters **********************************************
     
     public String getUsername() {
 		return username;
@@ -128,10 +152,6 @@ public class Usuario {
 	}
 
 	public void setDinero_promocion(int dinero_promocion) {
-		// El dinero promoción no puede ser negativo
-		if (dinero_promocion < 0) {
-			throw new IllegalArgumentException("El dinero promocion no puede ser negativo");
-		}
 		this.dinero_promocion = dinero_promocion;
 	}
 
@@ -158,6 +178,4 @@ public class Usuario {
 	public void setPromociones(Set<Promocion> promociones) {
 		this.promociones = promociones;
 	}
-
-    
 }

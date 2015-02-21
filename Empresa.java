@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import org.hibernate.validator.constraints.*;
 
 /**
 * Clase Empresa 
@@ -21,27 +24,39 @@ public class Empresa {
 	// Registro de identificación fiscal de la empresa
 	// Atributo clave que no puede ser NULL.
     @Id 
-    @Column(name="RIF")
+    @Column(name="RIF", nullable= false)
     private int rif;
     
     // Correo electrónico de la empresa 
     // No puede tomar valor NULL.
-    @Column(name="CORREO")
+    @Column(name="CORREO", nullable= false)
+    @Email( // Verifica que la dirección de correo sea válida
+			message = "La dirección de correo '${validatedValue}' debe ser válida")
+	@Size(
+			min = 13, 
+			max = 30, 
+			message = "La dirección de correo '${validatedValue}' debe estar entre {min} y {max} caracteres")
     private String correo;
      
     // Nombre de la empresa.
     // No puede tomar valor NULL.
-	@Column(name="NOMBRE")
+	@Column(name="NOMBRE", nullable= false)
+	@Size(
+			max = 50,
+			message = "El nombre de la empresa debe tener menos de {max} caracteres")
     private String nombre;
     
 	// Número telefónico de contacto de la empresa.
 	// No puede tomar valor NULL.
-	@Column(name="TELEFONO")
+	@Column(name="TELEFONO", nullable= false)
 	private int telefono;
 	
 	// Nombre oficial por el que se conoce colectivamente 
 	// a la empresa. No puede tomar valor NULL.
-	@Column(name="RAZON_SOCIAL")
+	@Column(name="RAZON_SOCIAL", nullable= false)
+	@Size(
+			max = 50,
+			message = "La razón social de la empresa debe tener menos de {max} caracteres")
     private String razon_social;
     
 	@Column(name="NUM_CLIENTES")
@@ -78,9 +93,6 @@ public class Empresa {
 	}
 
 	public void setTelefono(int telefono) {
-		if ((telefono < 1000000) || (telefono > 9999999)) {
-			throw new IllegalArgumentException("Debe ingresar un numero de telefono valido");
-		}
 		this.telefono = telefono;
 	}
 
@@ -97,9 +109,6 @@ public class Empresa {
 	}
 
 	public void setNum_clientes(int num_clientes) {
-		if (num_clientes < 0) {
-			throw new IllegalArgumentException("Las empresas no pueden tener un numero negativo de clientes");
-		}
 		this.num_clientes = num_clientes;
 	}    
    

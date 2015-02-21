@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
  
 /**
 * Clase Promocion 
@@ -17,41 +19,58 @@ import javax.persistence.*;
 @Table(name="PROMOCION")
 public class Promocion {
  
+	// Código único que sirve para identificar a una promoción
     @Id
     @Column(name="PROMOCOD")
     @GeneratedValue
     private int promoCod;
  
+    // Breve descripción del bien o producto que se está ofertando
 	@Column(name="DESCRIPCION")
     private String descripcion;
-     
+    
+	// Monto que tendría el bien o servicio de no ser por la promoción ofertada
     @Column(name="MONTO_ORIGINAL")
     private int monto_original;
     
+    // Monto que ofrece la promoción durante un tiempo limitado.
     @Column(name="MONTO_OFERTADO")
     private int monto_ofertado;
     
+    // Fecha en la que comienza la promoción
     @Column(name="FECHA_INI")
     private Date fecha_ini;
     
+    // Fecha en la que culmina la promoción.
     @Column(name="FECHA_FIN")
     private Date fecha_fin;
     
+    // Descripción de algunas condiciones que se deben 
+    // cumplir para poder optar por la oferta.
     @Column(name="CONDICIONES")
     private String condiciones;
     
+    // Cantidad de bienes o servicios disponibles para ofertar.
     @Column(name="CANTIDAD_TOTAL")
     private int cantidad_total;
     
+    // Límite de veces que un mismo usuario puede adquirir la promoción
     @Column(name="CANTIDAD_USUARIO")
     private int cantidad_usuario;
     
+    // Imagen asociadas al bien o producto que se está ofertando
     @Column(name="IMAGEN")
     private String imagen;
     
+    // Enlace a alguna página web o red social que contiene más 
+    // información de la promoción
     @Column(name="LINK_INFORMACION")
+    @URL(
+    		message = "Debe ingresar una dirección URL válida (http://direccion.dominio)")
     private String link_informacion;
     
+    // Etiqueta(s) de búsqueda que facilita(n) la posibilidad de encontrar 
+    // la oferta desde un buscador.
     @Column(name="ETIQUETAS")
     private String etiquetas;
     
@@ -61,12 +80,14 @@ public class Promocion {
     private Set<Usuario> usuarios = new HashSet<Usuario>();
      
 
-    
     // Constructor de la clase 
     public Promocion(String descripcion, int monto_original,
 			int monto_ofertado, Date fecha_ini, Date fecha_fin,
 			String condiciones, int cantidad_total, int cantidad_usuario,
 			String imagen, String link_informacion, String etiquetas) {
+    	if (fecha_ini.after(fecha_fin)) {
+    		throw new IllegalArgumentException("La fecha final no puede ser antes de la fecha inicial");
+    	}
 		this.descripcion = descripcion;
 		this.monto_original = monto_original;
 		this.monto_ofertado = monto_ofertado;
@@ -110,14 +131,19 @@ public class Promocion {
 
 
  	public void setCantidad_total(int cantidad_total) {
+ 		if (cantidad_total < 0) {
+ 			throw new IllegalArgumentException("La cantidad de promociones no puede ser negativa");
+ 		}
  		this.cantidad_total = cantidad_total;
  	}
 
 
  	public void setCantidad_usuario(int cantidad_usuario) {
+ 		if (cantidad_usuario < 0) {
+ 			throw new IllegalArgumentException("La cantidad de promociones por usuario no puede ser negativa");
+ 		}
  		this.cantidad_usuario = cantidad_usuario;
  	}
-
 
  	public void setImagen(String imagen) {
  		this.imagen = imagen;
@@ -168,6 +194,9 @@ public class Promocion {
 	}
 
 	public void setMonto_original(int monto_original) {
+		if (monto_original < 0) {
+			throw new IllegalArgumentException("El monto original de una promocion no puede ser negativo");
+		}
 		this.monto_original = monto_original;
 	}
 
@@ -176,6 +205,9 @@ public class Promocion {
 	}
 
 	public void setMonto_ofertado(int monto_ofertado) {
+		if (monto_ofertado < 0) {
+			throw new IllegalArgumentException("El monto ofertado de una promocion no puede ser negativo");
+		}
 		this.monto_ofertado = monto_ofertado;
 	}
 

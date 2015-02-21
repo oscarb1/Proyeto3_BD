@@ -1,7 +1,6 @@
 // Librerías a utilizar **********************************
 
 import java.util.Date;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -19,12 +18,13 @@ public class Main {
 		
 		//Una fecha para probar
 		Date date = new Date();
-		Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date, "estas son las condi", 300, 3, "/imagen/margara","www.viajaMarga.com","etiq");
-		Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date, "estas son las condi sushi", 100, 2, "/imagen/sushi","www.compraSushi.com","etiq2");
+		Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date, "estas son las condi", 300, 3, "/imagen/margara","http://www.viajaMarga.com","etiq");
+		Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date, "estas son las condi sushi", 100, 2, "/imagen/sushi","http://www.compraSushi.com","etiq2");
+	    
 	    
 	    //Usuarios
 	    Usuario Usuario1 = new Usuario("pedroA", "pedroAndrade@gmail.com", "Pedro", "Andrade");
-	    Usuario Usuario2 = new Usuario("jose32", "jose_perez@gmail.com", "Jose", "Perez");
+	    Usuario Usuario2 = new Usuario("jose32", "josemail@hotmail.com", "Jose", "Perez");
 	    Usuario Usuario3 = new Usuario("mariag23", "gonza.maria@gmail.com", "Maria", "Gonzalez");
 	    
 	    //Categorias y subcategorías 

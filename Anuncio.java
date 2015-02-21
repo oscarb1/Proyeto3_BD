@@ -3,13 +3,36 @@
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
+import javax.validation.constraints.*;
 import javax.persistence.*;
- 
+
+/**
+* Clase Anuncio
+* Tabla ANUNCIO
+*
+* Se refiere a las compañías que utilizan el portal para 
+* publicar las promociones ofrecidas por las mismas.
+*/
 @Entity
 @Table(name="ANUNCIO")
 public class Anuncio {
  
+	// Nivel del anuncio. Puede ser Oro, Plata o Bronce
+	@Id
+    @Column(name="NIVEL")
+    private String nivel;
+    
+	// Monto que corresponde a realizar dicho anuncio con dicho nivel.
+    @Column(name="TARIFA")
+    @Min(0)
+    private int tarifa;
+    
+    // Descripción de los beneficios otorgados por el nivel de anuncio.
+	@Column(name="DESCRIPCION")
+    private String descripcion;
+	
+// Getters and Setters *******************************************
+	
     public String getNivel() {
 		return nivel;
 	}
@@ -33,19 +56,6 @@ public class Anuncio {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-
-	@Id
-    @Column(name="NIVEL")
-    private String nivel;
-    
-    @Column(name="TARIFA")
-    private int tarifa;
      
-	@Column(name="DESCRIPCION")
-    private String descripcion;
-         
-
-
-
    
 }
