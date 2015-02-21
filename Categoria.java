@@ -1,3 +1,4 @@
+// Librerías a utilizar **********************************
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +12,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
  
+
+/**
+* Clase Categoria
+* Tabla CATEGORIA
+* 
+* Categoría en la que se clasifica una promoción.
+*/
 @Entity
 @Table(name="CATEGORIA")
 public class Categoria {
@@ -24,13 +32,15 @@ public class Categoria {
     @JoinColumn(name="superCategoria") //Owner de la relación es superCategoria
     private Categoria superCategoria;
  
-    //El rol desubCategoria que depente de una supercategoria Uno a muchos
+    //El rol de subCategoria que depende de una supercategoria Uno a muchos
     @OneToMany(mappedBy="superCategoria") //Mapeado desde el superCategoria que es el owner de la relación
     private Set<Categoria> subcategorias = new HashSet<Categoria>();
 
     public Categoria (String nombre){
     	this.nombre = nombre;
-    }
+    } // Cierre del constructor
+    
+    // Getters and Setters ***********************************
     
 	public String getNombre() {
 		return nombre;
@@ -55,8 +65,5 @@ public class Categoria {
 	public void setSubcategoria(Set<Categoria> subcategoria) {
 		this.subcategorias = subcategoria;
 	}
- 
-
-    
  
 }

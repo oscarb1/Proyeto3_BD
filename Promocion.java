@@ -1,14 +1,18 @@
+// Librerías a utilizar *********************************
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
  
+/**
+* Clase Promocion 
+* Tabla PROMOCION
+*
+* Ofertas de bienes o servicios publicados por las empresas 
+* en el portal.
+*/
 @Entity
 @Table(name="PROMOCION")
 public class Promocion {
@@ -52,66 +56,13 @@ public class Promocion {
     private String etiquetas;
     
 
-	public String getCondiciones() {
-		return condiciones;
-	}
-
-
-	public int getCantidad_total() {
-		return cantidad_total;
-	}
-
-
-	public int getCantidad_usuario() {
-		return cantidad_usuario;
-	}
-
-
-	public String getImagen() {
-		return imagen;
-	}
-
-
-
-
-	public Set<Usuario> getUsuarios() {
-		return usuarios;
-	}
-
-
-	public void setCondiciones(String condiciones) {
-		this.condiciones = condiciones;
-	}
-
-
-	public void setCantidad_total(int cantidad_total) {
-		this.cantidad_total = cantidad_total;
-	}
-
-
-	public void setCantidad_usuario(int cantidad_usuario) {
-		this.cantidad_usuario = cantidad_usuario;
-	}
-
-
-	public void setImagen(String imagen) {
-		this.imagen = imagen;
-	}
-
-	
-
-
-	public void setUsuarios(Set<Usuario> usuarios) {
-		this.usuarios = usuarios;
-	}
-
 	//Mapeando desde Meeting, y meeting tiene un set de empleados 
     @ManyToMany(mappedBy="promociones") //Se debe colocar el nombre del set de meetings que se creo en Employee
     private Set<Usuario> usuarios = new HashSet<Usuario>();
      
 
     
-
+    // Constructor de la clase 
     public Promocion(String descripcion, int monto_original,
 			int monto_ofertado, Date fecha_ini, Date fecha_fin,
 			String condiciones, int cantidad_total, int cantidad_usuario,
@@ -127,9 +78,55 @@ public class Promocion {
 		this.imagen = imagen;
 		this.link_informacion = link_informacion;
 		this.etiquetas = etiquetas;
-	}
+	} // Cierre del constructor
 
 
+// Getters and Setters **********************************
+    
+ 	public String getCondiciones() {
+ 		return condiciones;
+ 	}
+ 	
+ 	public int getCantidad_total() {
+ 		return cantidad_total;
+ 	}
+
+ 	public int getCantidad_usuario() {
+ 		return cantidad_usuario;
+ 	}
+
+ 	public String getImagen() {
+ 		return imagen;
+ 	}
+
+ 	public Set<Usuario> getUsuarios() {
+ 		return usuarios;
+ 	}
+
+
+ 	public void setCondiciones(String condiciones) {
+ 		this.condiciones = condiciones;
+ 	}
+
+
+ 	public void setCantidad_total(int cantidad_total) {
+ 		this.cantidad_total = cantidad_total;
+ 	}
+
+
+ 	public void setCantidad_usuario(int cantidad_usuario) {
+ 		this.cantidad_usuario = cantidad_usuario;
+ 	}
+
+
+ 	public void setImagen(String imagen) {
+ 		this.imagen = imagen;
+ 	}
+
+ 	
+ 	public void setUsuarios(Set<Usuario> usuarios) {
+ 		this.usuarios = usuarios;
+ 	}
 	public String getLink_informacion() {
 		return link_informacion;
 	}

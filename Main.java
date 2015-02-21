@@ -1,3 +1,5 @@
+// Librerías a utilizar **********************************
+
 import java.util.Date;
 
 import org.hibernate.Session;
@@ -25,7 +27,7 @@ public class Main {
 	    Usuario Usuario2 = new Usuario("jose32", "jose_perez@gmail.com", "Jose", "Perez");
 	    Usuario Usuario3 = new Usuario("mariag23", "gonza.maria@gmail.com", "Maria", "Gonzalez");
 	    
-	    //Categoria
+	    //Categorias y subcategorías 
 	    Categoria categoria1 = new Categoria("viajes");
 	    
 	    Categoria subcategoria1 = new Categoria("nacionales");
@@ -47,7 +49,10 @@ public class Main {
 	    //categoria1 con dos subcategorias
 	    subcategoria2.setSuperCategoria(categoria1);
 	    subcategoria1.setSuperCategoria(categoria1);
-	         
+	    
+	    //
+	    // Se guardan los cambios y se cierra la sesión
+	    // con la base de datos
 	    session.save(Usuario1);
 	    session.save(Usuario2);
 	    session.save(subcategoria1);
