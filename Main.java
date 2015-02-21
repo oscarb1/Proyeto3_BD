@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+
 public class Main {
 	 
 	public static void main(String[] args) 
@@ -50,9 +51,13 @@ public class Main {
 	    subcategoria2.setSuperCategoria(categoria1);
 	    subcategoria1.setSuperCategoria(categoria1);
 	    
+	    //Anuncio
+	    Anuncio anuncio = new Anuncio(Nivel.Bronce, 300, "Anuncio básico");
+	    
 	    //
 	    // Se guardan los cambios y se cierra la sesión
 	    // con la base de datos
+	    session.save(anuncio);
 	    session.save(Usuario1);
 	    session.save(Usuario2);
 	    session.save(subcategoria1);

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-
 import org.hibernate.validator.constraints.*;
 
 /**
@@ -60,6 +59,9 @@ public class Empresa {
     private String razon_social;
     
 	@Column(name="NUM_CLIENTES")
+	@Min(
+			value = 0,
+			message= "El número de clientes no puede ser negativo")
 	private int num_clientes;
 	
 // Getters and Setters ***********************************

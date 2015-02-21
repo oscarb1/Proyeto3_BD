@@ -2,16 +2,8 @@
 
 import java.util.HashSet;
 import java.util.Set;
- 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
- 
+import javax.validation.constraints.*;
+import javax.persistence.*;
 
 /**
 * Clase Categoria
@@ -24,7 +16,10 @@ import javax.persistence.Table;
 public class Categoria {
      
     @Id
-	@Column(name="NOMBRE")
+	@Column(name="NOMBRE", nullable = false)
+    @Size(
+    		max = 20,
+    		message = "El nombre de la categoría '${validatedValue}' no debe pasar de 20 caracteres")
     private String nombre;
      
     //El rol Super Categoria

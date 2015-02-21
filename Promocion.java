@@ -3,7 +3,6 @@
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
@@ -19,43 +18,63 @@ import org.hibernate.validator.constraints.*;
 @Table(name="PROMOCION")
 public class Promocion {
  
+// Atributos ********************************************************//
+	
 	// Código único que sirve para identificar a una promoción
     @Id
-    @Column(name="PROMOCOD")
+    @Column(name="PROMOCOD", nullable = false)
     @GeneratedValue
     private int promoCod;
  
     // Breve descripción del bien o producto que se está ofertando
-	@Column(name="DESCRIPCION")
+	@Column(name="DESCRIPCION", nullable = false)
+	@Size(
+			max = 500,
+			message = "La descripción de una promoción puede contener hasta {max} caracteres")
     private String descripcion;
     
 	// Monto que tendría el bien o servicio de no ser por la promoción ofertada
-    @Column(name="MONTO_ORIGINAL")
+    @Column(name="MONTO_ORIGINAL", nullable = false)
+    @Min(
+    		value = 0,
+    		message = "El monto original de una promoción no puede ser negativo")
     private int monto_original;
     
     // Monto que ofrece la promoción durante un tiempo limitado.
-    @Column(name="MONTO_OFERTADO")
+    @Column(name="MONTO_OFERTADO", nullable = false)
+    @Min(
+    		value = 0,
+    		message = "El monto ofertado de una promoción no puede ser negativo")
     private int monto_ofertado;
     
     // Fecha en la que comienza la promoción
-    @Column(name="FECHA_INI")
+    @Column(name="FECHA_INI", nullable = false)
     private Date fecha_ini;
     
     // Fecha en la que culmina la promoción.
-    @Column(name="FECHA_FIN")
+    @Column(name="FECHA_FIN", nullable = false)
     private Date fecha_fin;
     
     // Descripción de algunas condiciones que se deben 
     // cumplir para poder optar por la oferta.
     @Column(name="CONDICIONES")
+    @Size(
+    		max = 400,
+    		message = "Las condiciones de una promoción no deben pasar los 400 caracteres")
     private String condiciones;
     
     // Cantidad de bienes o servicios disponibles para ofertar.
     @Column(name="CANTIDAD_TOTAL")
+    @Min(
+    		value = 0,
+    		message = "La cantidad de bienes o servicios a ofertar no puede ser negativa")
     private int cantidad_total;
     
     // Límite de veces que un mismo usuario puede adquirir la promoción
     @Column(name="CANTIDAD_USUARIO")
+    @Min(
+    		value = 0,
+    		message = "La cantidad de promociones disponibles por usuario no puede ser negativa")
     private int cantidad_usuario;
     
     // Imagen asociadas al bien o producto que se está ofertando
@@ -102,7 +121,7 @@ public class Promocion {
 	} // Cierre del constructor
 
 
-// Getters and Setters **********************************
+// Getters and Setters **********************************************//
     
  	public String getCondiciones() {
  		return condiciones;
@@ -131,17 +150,11 @@ public class Promocion {
 
 
  	public void setCantidad_total(int cantidad_total) {
- 		if (cantidad_total < 0) {
- 			throw new IllegalArgumentException("La cantidad de promociones no puede ser negativa");
- 		}
  		this.cantidad_total = cantidad_total;
  	}
 
 
  	public void setCantidad_usuario(int cantidad_usuario) {
- 		if (cantidad_usuario < 0) {
- 			throw new IllegalArgumentException("La cantidad de promociones por usuario no puede ser negativa");
- 		}
  		this.cantidad_usuario = cantidad_usuario;
  	}
 
@@ -157,21 +170,17 @@ public class Promocion {
 		return link_informacion;
 	}
 
-
 	public void setLink_informacion(String link_informacion) {
 		this.link_informacion = link_informacion;
 	}
-
 
 	public String getEtiquetas() {
 		return etiquetas;
 	}
 
-
 	public void setEtiquetas(String etiquetas) {
 		this.etiquetas = etiquetas;
 	}
-
 
 	public int getPromoCod() {
 		return promoCod;
@@ -194,9 +203,6 @@ public class Promocion {
 	}
 
 	public void setMonto_original(int monto_original) {
-		if (monto_original < 0) {
-			throw new IllegalArgumentException("El monto original de una promocion no puede ser negativo");
-		}
 		this.monto_original = monto_original;
 	}
 
@@ -205,9 +211,6 @@ public class Promocion {
 	}
 
 	public void setMonto_ofertado(int monto_ofertado) {
-		if (monto_ofertado < 0) {
-			throw new IllegalArgumentException("El monto ofertado de una promocion no puede ser negativo");
-		}
 		this.monto_ofertado = monto_ofertado;
 	}
 
@@ -216,6 +219,9 @@ public class Promocion {
 	}
 
 	public void setFecha_ini(Date fecha_ini) {
+		if (fecha_ini.after(this.fecha_fin)) {
+			throw new IllegalArgumentException("La fecha final no puede ser antes de la fecha inicial");
+		}
 		this.fecha_ini = fecha_ini;
 	}
 
@@ -224,9 +230,10 @@ public class Promocion {
 	}
 
 	public void setFecha_fin(Date fecha_fin) {
+		if (this.fecha_ini.after(fecha_fin)) {
+			throw new IllegalArgumentException("La fecha final no puede ser antes de la fecha inicial");
+		}
 		this.fecha_fin = fecha_fin;
 	}
-
-
    
 }
