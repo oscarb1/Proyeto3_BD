@@ -62,6 +62,9 @@ public class Usuario {
     		message = "El dinero promoción debe ser positivo")
     private int dinero_promocion;
     
+    @Embedded
+    private TarjetaDeCredito Tdc;
+    
     // Constructor de la clase
     public Usuario(String username, String correo, String nombre, String apellido) {
         this.username = username;
@@ -70,6 +73,9 @@ public class Usuario {
         this.nombre = nombre;
         this.dinero_promocion = 0;
     } // Cierre del constructor
+    
+   // Usada para recuperar datos en los Query
+    protected Usuario(){}
 
     
 // Asociaciones ****************************************************
@@ -199,4 +205,14 @@ public class Usuario {
 	public void setPromociones(Set<Promocion> promociones) {
 		this.promociones = promociones;
 	}
+
+	public TarjetaDeCredito getTdc() {
+		return Tdc;
+	}
+
+	public void setTdc(TarjetaDeCredito tdc) {
+		this.Tdc = tdc;
+	}
+	
+	
 }

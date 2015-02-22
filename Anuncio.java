@@ -1,8 +1,5 @@
 // Librerías a utilizar **********************************
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import javax.validation.constraints.*;
 import javax.persistence.*;
 
