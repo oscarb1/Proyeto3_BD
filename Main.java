@@ -36,6 +36,8 @@ public class Main {
 		    
 		    //Categorias y subcategorías 
 		    Categoria categoria1 = new Categoria("viajes");
+		    Categoria categoria2 = new Categoria("comida");
+		    
 		    
 		    Categoria subcategoria1 = new Categoria("nacionales");
 		    Categoria subcategoria2 = new Categoria("internacionales");
@@ -46,6 +48,10 @@ public class Main {
 		    
 		    //usuario2 tiene una promocion adquirida
 		    Usuario2.getPromociones().add(promo2);
+		    
+		    //Usuario 2 tiene dos categoria de preferencia
+		    Usuario2.getCategorias().add(categoria1);
+		    Usuario2.getCategorias().add(categoria2);
 		    
 		    //Usuario3 tiene dos amigos
 		    Usuario1.getAmigos().add(Usuario3);
@@ -77,7 +83,7 @@ public class Main {
 		// Queries ****************************************************** //}
 		// Promociones adquiridas por el usuario 'pedroA'
 		promocionesAdquiridasPor("pedroA");
-		amigosEnComun("pedroA","jose32");
+		//amigosEnComun("pedroA","jose32");
 		// 
 
 		sessionFactory.close();
