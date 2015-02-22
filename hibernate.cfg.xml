@@ -38,6 +38,7 @@
         <mapping class="Anuncio"/>
         <mapping class="Empresa"/>
         <mapping class="TarjetaDeCredito"/>
+        <mapping class="Publicacion"/>
  
     </session-factory>
 
