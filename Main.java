@@ -3,6 +3,7 @@
 import java.util.Date;
 import java.util.List;
 import java.util.Iterator;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,15 +21,17 @@ public class Main {
 		
 		try {
 			transaction = session.beginTransaction();
-		   
-			//Promociones
-			
-			//Una fecha para probar
+		   //Una fecha para probar
 			Date date = new Date();
+			
+			//Promociones
 			Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date, "estas son las condi", 300, 3, "/imagen/margara","http://www.viajaMarga.com","etiq");
 			Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date, "estas son las condi sushi", 100, 2, "/imagen/sushi","http://www.compraSushi.com","etiq2");
 		    
+			//Empresas
+			Empresa empresa1 = new Empresa(20793613,"info@vendemosalgo.com","Vendemos Algo",2127628321,"C.A",10);
 		    
+			
 		    //Usuarios
 		    Usuario Usuario1 = new Usuario("pedroA", "pedroAndrade@gmail.com", "Pedro", "Andrade");
 		    Usuario Usuario2 = new Usuario("jose32", "josemail@hotmail.com", "Jose", "Perez");
@@ -37,11 +40,12 @@ public class Main {
 		    //Categorias y subcategorías 
 		    Categoria categoria1 = new Categoria("viajes");
 		    Categoria categoria2 = new Categoria("comida");
-		    
+		    Categoria categoria3 = new Categoria("electronico");
 		    
 		    Categoria subcategoria1 = new Categoria("nacionales");
 		    Categoria subcategoria2 = new Categoria("internacionales");
 		 
+		    
 		    //Usuario1 tiene dos promociones adquiridas
 		    Usuario1.getPromociones().add(promo1);
 		    Usuario1.getPromociones().add(promo2);
@@ -62,6 +66,11 @@ public class Main {
 		    //categoria1 con dos subcategorias
 		    subcategoria2.setSuperCategoria(categoria1);
 		    subcategoria1.setSuperCategoria(categoria1);
+		    
+		    //Empresa brinda tres categorias
+		    //empresa1.getCategorias_brinda().add(categoria1);
+		    //empresa1.getCategorias_brinda().add(categoria2);
+		    //empresa1.getCategorias_brinda().add(categoria3);
 		    
 		    //Anuncio
 		    Anuncio anuncio = new Anuncio(Nivel.Bronce, 300, "Anuncio básico");
