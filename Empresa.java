@@ -3,8 +3,10 @@
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
 import org.hibernate.validator.constraints.*;
 
 /**
@@ -64,6 +66,21 @@ public class Empresa {
 			message= "El número de clientes no puede ser negativo")
 	private int num_clientes;
 	
+//Constructor de la clase
+public Empresa(int rif, String correo, String nombre, int telefono,
+			String razon_social, int num_clientes) {
+		super();
+		this.rif = rif;
+		this.correo = correo;
+		this.nombre = nombre;
+		this.telefono = telefono;
+		this.razon_social = razon_social;
+		this.num_clientes = num_clientes;
+	}
+	
+//RElaciones ********************************
+	
+	
 // Getters and Setters ***********************************
 	
 	public int getRif() {
@@ -77,6 +94,8 @@ public class Empresa {
 	public String getCorreo() {
 		return correo;
 	}
+
+
 
 	public void setCorreo(String correo) {
 		this.correo = correo;
