@@ -38,7 +38,6 @@ public class Main {
 		    Categoria categoria1 = new Categoria("viajes");
 		    Categoria categoria2 = new Categoria("comida");
 		    
-		    
 		    Categoria subcategoria1 = new Categoria("nacionales");
 		    Categoria subcategoria2 = new Categoria("internacionales");
 		 
@@ -83,9 +82,15 @@ public class Main {
 		// Queries ****************************************************** //}
 		// Promociones adquiridas por el usuario 'pedroA'
 		promocionesAdquiridasPor("pedroA");
-		//amigosEnComun("pedroA","jose32");
-		// 
+		
+		// Amigos en común entre el usuario 'pedroA' y el usuario 'jose32'
+		amigosEnComun("pedroA","jose32"); 
 
+		// Usuarios que prefieren la categoría viajes
+		usuariosQuePrefierenCategoria("viajes");
+		
+		
+		
 		sessionFactory.close();
 	}
 	
@@ -108,6 +113,7 @@ public class Main {
 		    		"join u.promociones p " +
 		    		"where u.username = '" + name + "'").list();
 	    	
+			System.out.println();
 			System.out.println("Promociones adquiridas por el usuario: " + name);
 			
 	    	for (Promocion promocion : listaResultados) {
@@ -127,11 +133,51 @@ public class Main {
 	}
 	
 	/**
-	* promocionesAdquiridasPor
+	* usuariosQuePrefierenCategoria
 	*
-	* Procedimiento que dado el username de un usuario devuelve todas las promociones
-	* que han sido adquiridad por él.
-	* @param name : El username del usuario del que se desea conocer las promociones adquiridad
+	* Procedimiento que dada una categoría devuelve una lista de usuarios que la prefieren
+	* @param nombreCat : Nombre de la categoría
+	*/
+	public static void usuariosQuePrefierenCategoria(String nombreCat){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+	    try {
+	    	transaction = session.beginTransaction();
+	    	List<Usuario> listaResultados =  session.createQuery(
+	    			"select u " +
+		    		"from Usuario u " +
+		    		"JOIN u.categorias cat " +
+		    		"WHERE cat = '" + nombreCat + "'"
+	    			).list();
+	    	
+			System.out.println();
+			System.out.println("Usuarios que prefieren la categoría " + nombreCat);
+	    	for (Usuario usuario : listaResultados) {
+        		System.out.println("username: " + usuario.getUsername()); 
+        		System.out.println("  Nombre: " + usuario.getNombre()); 
+        		System.out.println("  Apellido: " + usuario.getApellido());
+        		System.out.println();
+        	}
+		    
+	    	transaction.commit();
+	    } catch (HibernateException e) {
+    		if (transaction!=null) transaction.rollback();
+    		e.printStackTrace(); 
+    		
+	    } finally {
+		    session.close();
+	    }
+
+	}
+	
+	/**
+	* amigosEnComun
+	*
+	* Procedimiento que dado el username de dos usuarios imprime los amigos en común
+	* entre ellos.
+	* @param user : El username primer usuario
+	* @param user2: El username del segundo usuario
 	*/
 	public static void amigosEnComun(String user, String user2){
 		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
@@ -146,8 +192,8 @@ public class Main {
 		    		"and  '" + user2 + "' MEMBER OF u.listaAmigos"
 	    			).list();
 	    	
-			System.out.println("Amigos en común entre usuario " + user + " y " + user2);
 			System.out.println();
+			System.out.println("Amigos en común entre usuario " + user + " y " + user2);
 	    	for (Usuario usuario : listaResultados) {
         		System.out.println("username: " + usuario.getUsername()); 
         		System.out.println("  Nombre: " + usuario.getNombre()); 
