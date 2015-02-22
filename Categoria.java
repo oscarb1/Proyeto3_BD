@@ -2,6 +2,7 @@
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.validation.constraints.*;
 import javax.persistence.*;
 
@@ -35,8 +36,30 @@ public class Categoria {
     	this.nombre = nombre;
     } // Cierre del constructor
     
-    // Getters and Setters ***********************************
+ // Asociaciones ****************************************************
     
+	//Mapeo de categorias desde usuario 
+    @ManyToMany(mappedBy="categorias") 
+    private Set<Usuario> usuarios = new HashSet<Usuario>();
+ 
+  // Getters and Setters ***********************************	
+    
+	public Set<Categoria> getSubcategorias() {
+		return subcategorias;
+	}
+
+	public void setSubcategorias(Set<Categoria> subcategorias) {
+		this.subcategorias = subcategorias;
+	}
+
+	public Set<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(Set<Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}

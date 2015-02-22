@@ -111,12 +111,33 @@ public class Usuario {
 
     @ManyToMany(mappedBy="amigos")
     private Set<Usuario> listaAmigos = new HashSet<Usuario>();
+    
+    
+    //Relacion PREFIERE
+    @ManyToMany(cascade = {CascadeType.ALL})
+
+    @JoinTable(name="PREFIERE", //Tabla intermedia
+                joinColumns={@JoinColumn(name="USERNAME")}, //username USUARIO
+                inverseJoinColumns={@JoinColumn(name="NOMBRE_CATEGORIA")}) //Nombre de la categoria que prefiere
+   
+
+
+    //Lista de categorias que prefiere el usuario
+    private Set<Categoria> categorias = new HashSet<Categoria>();
 
     
 // Getters and Setters **********************************************
     
     public String getUsername() {
 		return username;
+	}
+
+	public Set<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(Set<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 
 	public void setUsername(String username) {
