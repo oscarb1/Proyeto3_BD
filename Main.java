@@ -20,15 +20,16 @@ public class Main {
 		
 		try {
 			transaction = session.beginTransaction();
-		   
-			//Promociones
-			
-			//Una fecha para probar
+		   //Una fecha para probar
 			Date date = new Date();
+			
+			//Promociones
 			Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date, "estas son las condi", 300, 3, "/imagen/margara","http://www.viajaMarga.com","etiq");
 			Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date, "estas son las condi sushi", 100, 2, "/imagen/sushi","http://www.compraSushi.com","etiq2");
 		    
-		    
+			//Empresas
+			Empresa empresa1 = new Empresa(20613827,"info@vendemosalgo.com","Vendemos Algo",2127628321,"C.A",10);
+			
 		    //Usuarios
 		    Usuario Usuario1 = new Usuario("pedroA", "pedroAndrade@gmail.com", "Pedro", "Andrade");
 		    Usuario Usuario2 = new Usuario("jose32", "josemail@hotmail.com", "Jose", "Perez");
@@ -37,6 +38,7 @@ public class Main {
 		    //Categorias y subcategorías 
 		    Categoria categoria1 = new Categoria("viajes");
 		    Categoria categoria2 = new Categoria("comida");
+		    Categoria categoria3 = new Categoria("ropa");
 		    
 		    Categoria subcategoria1 = new Categoria("nacionales");
 		    Categoria subcategoria2 = new Categoria("internacionales");
@@ -62,6 +64,11 @@ public class Main {
 		    subcategoria2.setSuperCategoria(categoria1);
 		    subcategoria1.setSuperCategoria(categoria1);
 		    
+		    //Empresa brinda tres categorias
+		    empresa1.getCategorias_brinda().add(categoria1);
+		    empresa1.getCategorias_brinda().add(categoria2);
+		    empresa1.getCategorias_brinda().add(categoria3);
+		    
 		    //Anuncio
 		    Anuncio anuncio = new Anuncio(Nivel.Bronce, 300, "Anuncio básico");
 		    session.save(anuncio);
@@ -69,6 +76,7 @@ public class Main {
 		    session.save(Usuario2);
 		    session.save(subcategoria1);
 		    session.save(subcategoria2);
+		    session.save(empresa1);
 		    
 		    transaction.commit();
 		}  catch (HibernateException e) {
