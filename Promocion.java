@@ -120,6 +120,7 @@ public class Promocion {
 		this.etiquetas = etiquetas;
 	} // Cierre del constructor
 
+    protected Promocion(){}
 
 // Getters and Setters **********************************************//
     
