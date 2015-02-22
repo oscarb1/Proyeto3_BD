@@ -30,6 +30,16 @@ public class Main {
 			//Empresas
 			Empresa empresa1 = new Empresa(20613827,"info@vendemosalgo.com","Vendemos Algo",2127628321,"C.A",10);
 			
+		    //Anuncio
+		    Anuncio anuncio = new Anuncio(Nivel.Bronce, 300, "Anuncio básico");
+			
+			//Publicacion
+		    Publicacion publi1 = new Publicacion();
+		    //elenentos de la publicacion
+		    publi1.setAnuncio(anuncio);
+		    publi1.setEmpresa(empresa1);
+		    publi1.setPromocion(promo1);
+			
 		    //Usuarios
 		    Usuario Usuario1 = new Usuario("pedroA", "pedroAndrade@gmail.com", "Pedro", "Andrade");
 		    Usuario Usuario2 = new Usuario("jose32", "josemail@hotmail.com", "Jose", "Perez");
@@ -69,14 +79,14 @@ public class Main {
 		    empresa1.getCategorias_brinda().add(categoria2);
 		    empresa1.getCategorias_brinda().add(categoria3);
 		    
-		    //Anuncio
-		    Anuncio anuncio = new Anuncio(Nivel.Bronce, 300, "Anuncio básico");
+
 		    session.save(anuncio);
 		    session.save(Usuario1);
 		    session.save(Usuario2);
 		    session.save(subcategoria1);
 		    session.save(subcategoria2);
 		    session.save(empresa1);
+		    session.save(publi1);
 		    
 		    transaction.commit();
 		}  catch (HibernateException e) {
