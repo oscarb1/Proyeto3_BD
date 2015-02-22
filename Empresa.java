@@ -78,11 +78,28 @@ public Empresa(int rif, String correo, String nombre, int telefono,
 		this.num_clientes = num_clientes;
 	}
 	
-//RElaciones ********************************
+//RElaciones **************************************************
+//Relacion BRINDA
+@ManyToMany(cascade = {CascadeType.ALL})
+
+@JoinTable(name="BRINDA", //Tabla intermedia
+            joinColumns={@JoinColumn(name="RIF")}, //username USUARIO
+            inverseJoinColumns={@JoinColumn(name="NOMBRE_CATEGORIA")}) //Nombre de la categoria que brinda la empresa
+
+//Lista de categorias que brinda la empresa
+private Set<Categoria> categorias_brinda = new HashSet<Categoria>();
 	
 	
 // Getters and Setters ***********************************
 	
+	public Set<Categoria> getCategorias_brinda() {
+	return categorias_brinda;
+}
+
+public void setCategorias_brinda(Set<Categoria> categorias_brinda) {
+	this.categorias_brinda = categorias_brinda;
+}
+
 	public int getRif() {
 		return rif;
 	}

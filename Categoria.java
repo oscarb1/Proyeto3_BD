@@ -41,9 +41,21 @@ public class Categoria {
 	//Mapeo de categorias desde usuario 
     @ManyToMany(mappedBy="categorias") 
     private Set<Usuario> usuarios = new HashSet<Usuario>();
+    
+	//Mapeo de categorias desde empresa
+    @ManyToMany(mappedBy="categorias_brinda") 
+    private Set<Empresa> empresas = new HashSet<Empresa>();
  
   // Getters and Setters ***********************************	
     
+	public Set<Empresa> getEmpresas() {
+		return empresas;
+	}
+
+	public void setEmpresas(Set<Empresa> empresas) {
+		this.empresas = empresas;
+	}
+
 	public Set<Categoria> getSubcategorias() {
 		return subcategorias;
 	}
