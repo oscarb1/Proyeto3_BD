@@ -140,7 +140,11 @@ public class Main {
 		// Promociones que contienen la etiqueta comida
 		buscarPromociones("comida");
 		
+		// Etiquetas de la promoción con código 2
 		etiquetas(2);
+		
+		listarPromocionesPrecio();
+		
 		sessionFactory.close();
 	}
 	
@@ -180,7 +184,7 @@ public class Main {
 		    session.close();
 	    }
 
-	}
+	} // fin de procedimiento promocionesAdquiridasPor
 	
 	/**
 	* usuariosQuePrefierenCategoria
@@ -219,7 +223,7 @@ public class Main {
 		    session.close();
 	    }
 
-	}
+	} // fin de procedimiento usuariosQuePrefierenCategoria
 	
 	/**
 	* amigosEnComun
@@ -260,7 +264,7 @@ public class Main {
 		    session.close();
 	    }
 
-	}
+	}// fin de procedimiento amigosEnComun
 	
 	/**
 	* promocionesOfrecidasPor
@@ -307,7 +311,7 @@ public class Main {
 		    session.close();
 	    }
 
-	}
+	}// fin de procedimiento promocionesOfrecidasPor
 	
 	/**
 	* buscarPromociones
@@ -325,8 +329,8 @@ public class Main {
 	    	List<Promocion> listaResultados =  session.createQuery(
 	    			"select p " +
 		    		"from Promocion p " +
-		    		"join p.etiquetas etiq " +
-	    			"where '" + etiqueta +	"' member of etiq"
+		    		"inner join p.etiquetas etiq " +
+	    			"where etiq = '" + etiqueta +	"'"
 	    			).list();
 	    	
 			System.out.println();
@@ -351,42 +355,78 @@ public class Main {
 	    } finally {
 		    session.close();
 	    }
-	}
+	}// fin de procedimiento buscarPromociones
 	    
-	    /**
-		* etiquetas
-		*
-		* Procedimiento que dada una promoción lista todas sus etiquetas
-		* @param etiqueta : Etiqueta que se usará para realizar la búsqueda
-		*/
-		public static void etiquetas(int promocod){
-			SessionFactory sessionFac = HibernateUtil.getSessionFactory();
-			Session session = sessionFac.openSession();
-			Transaction transaction = null;
-		    try {
-		    	transaction = session.beginTransaction();
-		    	List<Promocion> listaResultados =  session.createQuery(
-		    			"select p " +
-			    		"from Promocion p " +
-		    			"where p.promoCod = '" + promocod +	"'"
-		    			).list();
+	/**
+	* etiquetas
+	*
+	* Procedimiento que dada una promoción lista todas sus etiquetas
+	* @param etiqueta : Etiqueta que se usará para realizar la búsqueda
+	*/
+	public static void etiquetas(int promocod){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+		try {
+		    transaction = session.beginTransaction();
+		    List<Promocion> listaResultados =  session.createQuery(
+		    		"select p " +
+			    	"from Promocion p " +
+		    		"where p.promoCod = '" + promocod +	"'"
+		    		).list();
 		    	
-				System.out.println();
-				System.out.print("Etiquetas de la promoción ");
-		    	for (Promocion promocion : listaResultados) {
-		    		System.out.println(promocion.getDescripcion());
-		    		for (String etiqueta : promocion.getEtiquetas()) {
-		    			System.out.println("	Etiqueta: " 	+ etiqueta); 
-		    		}
-	        	}
+			System.out.println();
+			System.out.print("Etiquetas de la promoción ");
+		    for (Promocion promocion : listaResultados) {
+		    	System.out.println(promocion.getDescripcion());
+		    	for (String etiqueta : promocion.getEtiquetas()) {
+		    		System.out.println("	Etiqueta: " 	+ etiqueta); 
+		    	}
+	        }
 			    
-		    	transaction.commit();
-		    } catch (HibernateException e) {
-	    		if (transaction!=null) transaction.rollback();
-	    		e.printStackTrace(); 
+		    transaction.commit();
+		} catch (HibernateException e) {
+	    	if (transaction!=null) transaction.rollback();
+	    	e.printStackTrace(); 
 	    		
-		    } finally {
-			    session.close();
-		    }
+		} finally {
+			session.close();
 		}
+	}// fin de procedimiento etiquetas
+	
+	public static void listarPromocionesPrecio(){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+	    try {
+	    	transaction = session.beginTransaction();
+	    	List<Promocion> listaResultados =  session.createQuery(
+	    			"select p " +
+		    		"from Promocion p " +
+		    		"order by (p.monto_ofertado)"
+	    			).list();
+	    	
+			System.out.println();
+			System.out.println("Promociones ordenadas por monto de precio ofertado ");
+	    	for (Promocion promocion : listaResultados) {
+        		System.out.println("Código de la promoción: " 	+ promocion.getPromoCod()); 
+        		System.out.println("Descripción: " 				+ promocion.getDescripcion());
+        		System.out.println("Monto Original: " 			+ promocion.getMonto_original());
+        		System.out.println("Monto Ofertado: " 			+ promocion.getMonto_ofertado());
+        		System.out.println("  Fecha de Inicio: " 		+ promocion.getFecha_ini());
+	    		System.out.println("  Fecha de Culminación: " 	+ promocion.getFecha_fin());
+	    		System.out.println("  Condiciones: " 			+ promocion.getCondiciones());
+	    		System.out.println("  + Info a través de : " 	+ promocion.getLink_informacion());
+        		System.out.println();
+        	}
+		    
+	    	transaction.commit();
+	    } catch (HibernateException e) {
+    		if (transaction!=null) transaction.rollback();
+    		e.printStackTrace(); 
+    		
+	    } finally {
+		    session.close();
+	    }
+	}// fin de procedimiento buscarPromociones
 }
