@@ -103,7 +103,7 @@ public class Usuario {
      * In this case the join table is EMPLOYEE_MEETING.
      * @JoinColumn – Is used to define the join column (linking column) in both main tables.
      */
-    @JoinTable(name="ADQUIERE", //Tabla intermedia
+    @JoinTable(name="COMPRA", //Tabla intermedia
                 joinColumns={@JoinColumn(name="USERNAME")}, //username USUARIO
                 inverseJoinColumns={@JoinColumn(name="PROMOCOD")}) //ID de la PROMOCION
    

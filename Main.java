@@ -87,11 +87,24 @@ public class Main {
 		    Usuario1.getTarjetas().add(tdc1);
 		 
 		    //Usuario1 tiene dos promociones adquiridas
-		    Usuario1.getPromociones().add(promo1);
-		    Usuario1.getPromociones().add(promo2);
+		    Adquiere compra1 = new Adquiere();
+		    compra1.setUsuario(Usuario1);
+		    compra1.setPromocion(promo1);
+		    compra1.setComentario("Genial!");
+		    compra1.setCalificacion(4);
+		
+		    Adquiere compra2 = new Adquiere();
+		    compra2.setPromocion(promo2);
+		    compra2.setCalificacion(4);
+		    
+		    Adquiere compra3 = new Adquiere();
+		    compra3.setPromocion(promo3);
+		    compra3.setCalificacion(4);
+		    //Usuario1.getPromociones().add(promo1);
+		    //Usuario1.getPromociones().add(promo2);
 		    
 		    //usuario2 tiene una promocion adquirida
-		    Usuario2.getPromociones().add(promo2);
+		    //Usuario2.getPromociones().add(promo2);
 		    
 		    //Usuario 2 tiene dos categoria de preferencia
 		    Usuario2.getCategorias().add(categoria1);
@@ -116,7 +129,8 @@ public class Main {
 		    promo3.setCategoria(categoria1);
 		    promo1.setCategoria(categoria1);
 		    promo2.setCategoria(categoria2);
-		
+		    
+
 		    session.save(tdc1);
 		    session.save(anuncio);
 		    session.save(Usuario1);
@@ -126,7 +140,11 @@ public class Main {
 		    session.save(empresa1);
 		    session.save(publi1);
 		    session.save(promo3);
+		    session.save(promo2);
 		    session.save(promo1);
+		    session.save(compra1);
+		    session.save(compra2);
+		    session.save(compra3);
 		    
 		    transaction.commit();
 		}  catch (HibernateException e) {
@@ -164,6 +182,7 @@ public class Main {
 		
 		listarPromocionesRangoPrecio(4000,20000);
 		
+		calificacionPromedio(2);
 		sessionFactory.close();
 	}
 	
@@ -182,9 +201,9 @@ public class Main {
 	    	transaction = session.beginTransaction();
 	    	List<Promocion> listaResultados =  session.createQuery(
 		    		"select p " +
-		    		"from Usuario u " +
-		    		"join u.promociones p " +
-		    		"where u.username = '" + name + "'").list();
+		    		"from Adquiere a " +
+		    		"join a.promocion p " +
+		    		"where a.usuario = '" + name + "'").list();
 	    	
 			System.out.println();
 			System.out.println("Promociones adquiridas por el usuario: " + name);
@@ -517,6 +536,35 @@ public class Main {
 	    		System.out.println("  + Info a través de : " 	+ promocion.getLink_informacion());
         		System.out.println();
         	}
+		    
+	    	transaction.commit();
+	    } catch (HibernateException e) {
+    		if (transaction!=null) transaction.rollback();
+    		e.printStackTrace(); 
+    		
+	    } finally {
+		    session.close();
+	    }
+	}// fin de procedimiento buscarPromociones
+	
+	public static void calificacionPromedio(int promoCod){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+	    try {
+	    	transaction = session.beginTransaction();
+	    	Double calificacion = (Double) session.createQuery(
+	    			"select avg(a.Calificacion) " +
+		    		"from Adquiere a " +
+	    			"where a.promocion = '" + promoCod + "'"		
+	    			).uniqueResult();
+	    	String nombre = (String) session.createQuery(
+	    			"select p.descripcion " +
+	    			"from Promocion p " +
+	    			"where p.promoCod = '" + promoCod + "'"
+	    			).uniqueResult();
+			System.out.println();
+			System.out.println("Calificación promedio de la promoción " + nombre + " : " + calificacion);
 		    
 	    	transaction.commit();
 	    } catch (HibernateException e) {

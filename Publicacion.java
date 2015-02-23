@@ -1,9 +1,8 @@
 // Librerías a utilizar **********************************
 
-import javax.validation.constraints.*;
+
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.ArrayList;
+
 
 /**
 * Clase Publicacion
