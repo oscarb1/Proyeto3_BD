@@ -62,9 +62,6 @@ public class Usuario {
     		message = "El dinero promoción debe ser positivo")
     private int dinero_promocion;
     
-    @Embedded
-    private TarjetaDeCredito Tdc;
-    
     // Constructor de la clase
     public Usuario(String username, String correo, String nombre, String apellido) {
         this.username = username;
@@ -79,6 +76,14 @@ public class Usuario {
 
     
 // Asociaciones ****************************************************
+    
+    @OneToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name="TIENE", //Tabla intermedia
+	    joinColumns={@JoinColumn(name="USERNAME")}, //username USUARIO
+	    inverseJoinColumns={@JoinColumn(name="NUMERO_TARJETA")}) //ID de la PROMOCION
+
+    //Lista de promociones que ha adquirido el usuario
+    private Set<TarjetaDeCredito> tarjetas = new HashSet<TarjetaDeCredito>();
     
 	/*
      * @ManyToMany – Is used to create many-to-many relationship between Employee and Meeting entities. 
@@ -206,13 +211,15 @@ public class Usuario {
 		this.promociones = promociones;
 	}
 
-	public TarjetaDeCredito getTdc() {
-		return Tdc;
+	public Set<TarjetaDeCredito> getTarjetas() {
+		return tarjetas;
 	}
 
-	public void setTdc(TarjetaDeCredito tdc) {
-		this.Tdc = tdc;
+	public void setTarjetas(Set<TarjetaDeCredito> tarjetas) {
+		this.tarjetas = tarjetas;
 	}
+
+	
 	
 	
 }
