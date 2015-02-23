@@ -39,18 +39,24 @@ public class Main {
 			// Tarjetas de Credito
 			TarjetaDeCredito tdc1 = new TarjetaDeCredito("4541375325020471", "Reinaldo Verdugo", date2, 332, "MasterCard");
 			
-			//Promociones
+		
 			
 			//Etiquetas
 			Set<String> etiquetas1 = new HashSet<String>();
 			Set<String> etiquetas2 = new HashSet<String>();
+			Set<String> etiquetas3 = new HashSet<String>();
 			etiquetas1.add("margarita");
 			etiquetas1.add("viajes");
 			etiquetas2.add("comida");
-			etiquetas2.add("japonesa");
+			etiquetas2.add("japonesa");	
+			etiquetas3.add("andes");
+			
+			//Promociones
 			Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date2, "Mayores de 15 años", 300, 3, "/imagen/margara","http://www.viajaMarga.com",etiquetas1);
 			Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date2, "De lunes a jueves", 100, 2, "/imagen/sushi","http://www.compraSushi.com",etiquetas2);
-		    
+			Promocion promo3 = new Promocion("Viaje Merida Todo incluido", 4000,2000, date,date2, "Mayores de 18 años", 100, 2, "/imagen/merida","http://www.venAMerida.com",etiquetas3);
+
+			
 			//Empresas
 			Empresa empresa1 = new Empresa(20613827,"info@vendemosalgo.com","Vendemos Algo",2127628321,"C.A",10);
 			
@@ -106,6 +112,11 @@ public class Main {
 		    empresa1.getCategorias_brinda().add(categoria2);
 		    empresa1.getCategorias_brinda().add(categoria3);
 		    
+		    //Promo1 tiene 2 categorias
+		    promo3.setCategoria(categoria1);
+		    promo1.setCategoria(categoria1);
+		   
+		    
 		    session.save(tdc1);
 		    session.save(anuncio);
 		    session.save(Usuario1);
@@ -114,6 +125,8 @@ public class Main {
 		    session.save(subcategoria2);
 		    session.save(empresa1);
 		    session.save(publi1);
+		    session.save(promo3);
+		    session.save(promo1);
 		    
 		    transaction.commit();
 		}  catch (HibernateException e) {

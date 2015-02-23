@@ -35,6 +35,8 @@ public class Categoria {
     public Categoria (String nombre){
     	this.nombre = nombre;
     } // Cierre del constructor
+    protected Categoria(){
+    }
     
  // Asociaciones ****************************************************
     
@@ -45,11 +47,22 @@ public class Categoria {
 	//Mapeo de categorias desde empresa
     @ManyToMany(mappedBy="categorias_brinda") 
     private Set<Empresa> empresas = new HashSet<Empresa>();
+    
+    @OneToMany(mappedBy="categoria") 
+    private Set<Promocion> promociones;
  
   // Getters and Setters ***********************************	
     
 	public Set<Empresa> getEmpresas() {
 		return empresas;
+	}
+
+	public Set<Promocion> getPromociones() {
+		return promociones;
+	}
+
+	public void setPromociones(Set<Promocion> promociones) {
+		this.promociones = promociones;
 	}
 
 	public void setEmpresas(Set<Empresa> empresas) {

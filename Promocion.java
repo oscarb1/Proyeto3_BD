@@ -94,12 +94,6 @@ public class Promocion {
     @ElementCollection
     private Set<String> etiquetas = new HashSet<String>();
     
-
-	//Mapeando desde Meeting, y meeting tiene un set de empleados 
-    @ManyToMany(mappedBy="promociones") //Se debe colocar el nombre del set de meetings que se creo en Employee
-    private Set<Usuario> usuarios = new HashSet<Usuario>();
-     
-
     // Constructor de la clase 
     public Promocion(String descripcion, int monto_original,
 			int monto_ofertado, Date fecha_ini, Date fecha_fin,
@@ -122,6 +116,20 @@ public class Promocion {
 	} // Cierre del constructor
 
     protected Promocion(){}
+    
+//Relaciones *********************************************
+	//Mapeando desde Meeting, y meeting tiene un set de empleados 
+    @ManyToMany(mappedBy="promociones") //Se debe colocar el nombre del set de meetings que se creo en Employee
+    private Set<Usuario> usuarios = new HashSet<Usuario>();
+   
+    
+   @ManyToOne //Significa que estoy mapeando de muchos a uno, porque el empleado trabaja en 1 dpto
+   @JoinColumn(name="categoria_nombre") //La columna por la que hace Join es department_id
+   private Categoria categoria;
+
+
+    
+ 
 
 // Getters and Setters **********************************************//
     
@@ -129,7 +137,15 @@ public class Promocion {
  		return condiciones;
  	}
  	
- 	public int getCantidad_total() {
+ 	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public int getCantidad_total() {
  		return cantidad_total;
  	}
 
