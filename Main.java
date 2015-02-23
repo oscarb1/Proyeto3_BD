@@ -74,6 +74,7 @@ public class Main {
 		    Usuario Usuario1 = new Usuario("pedroA", "pedroAndrade@gmail.com", "Pedro", "Andrade");
 		    Usuario Usuario2 = new Usuario("jose32", "josemail@hotmail.com", "Jose", "Perez");
 		    Usuario Usuario3 = new Usuario("mariag23", "gonza.maria@gmail.com", "Maria", "Gonzalez");
+		    Usuario Usuario3 = new Usuario("sayonaNeto1", "sayoneto@gmail.com", "Sayona", "Neto");
 		    
 		    //Categorias y subcategorías 
 		    Categoria categoria1 = new Categoria("viajes");
@@ -94,12 +95,16 @@ public class Main {
 		    compra1.setCalificacion(4);
 		
 		    Adquiere compra2 = new Adquiere();
+		    compra2.setUsuario(Usuario2);
 		    compra2.setPromocion(promo2);
+		    compra2.setComentario("Comi bastante xD");
 		    compra2.setCalificacion(4);
 		    
 		    Adquiere compra3 = new Adquiere();
+		    compra3.setUsuario(Usuario1);
 		    compra3.setPromocion(promo3);
-		    compra3.setCalificacion(4);
+		    compra3.setComentario("Muy bonito Merida");
+		    compra3.setCalificacion(3);
 		    //Usuario1.getPromociones().add(promo1);
 		    //Usuario1.getPromociones().add(promo2);
 		    
@@ -180,8 +185,10 @@ public class Main {
 		// Lista las promociones de la categoría pasada como parámetro
 		promocionesEnCategoria("viajes");
 		
+		// Lista las promociones entre un rango de precios definido
 		listarPromocionesRangoPrecio(4000,20000);
 		
+		// Indida la calificación promedio de una promoción
 		calificacionPromedio(2);
 		sessionFactory.close();
 	}
@@ -469,7 +476,7 @@ public class Main {
 	    } finally {
 		    session.close();
 	    }
-	}// fin de procedimiento buscarPromociones
+	}// fin de procedimiento listarPromocionesPrecio
 	
 	public static void promocionesEnCategoria(String nombreCat){
 		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
@@ -506,7 +513,7 @@ public class Main {
 	    } finally {
 		    session.close();
 	    }
-	}// fin de procedimiento buscarPromociones
+	}// fin de procedimiento promocionesEnCategoria
 	
 	public static void listarPromocionesRangoPrecio(int min, int max){
 		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
@@ -545,7 +552,7 @@ public class Main {
 	    } finally {
 		    session.close();
 	    }
-	}// fin de procedimiento buscarPromociones
+	}// fin de procedimiento listarPromocionesRangoPrecio
 	
 	public static void calificacionPromedio(int promoCod){
 		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
@@ -574,5 +581,5 @@ public class Main {
 	    } finally {
 		    session.close();
 	    }
-	}// fin de procedimiento buscarPromociones
+	}// fin de procedimiento calificacionPromedio
 }
