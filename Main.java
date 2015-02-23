@@ -74,7 +74,20 @@ public class Main {
 		    Usuario Usuario1 = new Usuario("pedroA", "pedroAndrade@gmail.com", "Pedro", "Andrade");
 		    Usuario Usuario2 = new Usuario("jose32", "josemail@hotmail.com", "Jose", "Perez");
 		    Usuario Usuario3 = new Usuario("mariag23", "gonza.maria@gmail.com", "Maria", "Gonzalez");
-		    Usuario Usuario3 = new Usuario("sayonaNeto1", "sayoneto@gmail.com", "Sayona", "Neto");
+		    Usuario Usuario4 = new Usuario("sayonaNeto1", "sayoneto@gmail.com", "Sayona", "Neto");
+		    
+		    //Recomendaciones
+		    Recomendacion recom1 = new Recomendacion();
+		    Recomendacion recom2 = new Recomendacion();
+		    //Usuario1 recomienda promo1 al Usuario2
+		    recom1.setRecomienda(Usuario1);
+		    recom1.setRecomendado(Usuario2);
+		    recom1.setPromocion(promo1);
+		    
+		    //Usuario1 recomienda promo1 al Usuario3
+		    recom2.setRecomienda(Usuario1);
+		    recom2.setRecomendado(Usuario3);
+		    recom2.setPromocion(promo1);
 		    
 		    //Categorias y subcategorías 
 		    Categoria categoria1 = new Categoria("viajes");
@@ -150,6 +163,8 @@ public class Main {
 		    session.save(compra1);
 		    session.save(compra2);
 		    session.save(compra3);
+		    session.save(recom1);
+		    session.save(recom2);
 		    
 		    transaction.commit();
 		}  catch (HibernateException e) {

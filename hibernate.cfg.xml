@@ -39,6 +39,8 @@
         <mapping class="Empresa"/>
         <mapping class="TarjetaDeCredito"/>
         <mapping class="Publicacion"/>
+        <mapping class="Recomendacion"/>
+        <mapping class="Adquiere"/>
  
     </session-factory>
 
