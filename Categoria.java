@@ -35,8 +35,8 @@ public class Categoria {
     public Categoria (String nombre){
     	this.nombre = nombre;
     } // Cierre del constructor
-    protected Categoria(){
-    }
+    
+    protected Categoria(){}
     
  // Asociaciones ****************************************************
     
@@ -49,7 +49,7 @@ public class Categoria {
     private Set<Empresa> empresas = new HashSet<Empresa>();
     
     @OneToMany(mappedBy="categoria") 
-    private Set<Promocion> promociones;
+    private Set<Promocion> promociones = new HashSet<Promocion>();
  
   // Getters and Setters ***********************************	
     

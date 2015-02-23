@@ -6,8 +6,8 @@ import java.util.Collection;
 import java.util.ArrayList;
 
 /**
-* Clase Publica
-* Tabla Publica
+* Clase Publicacion
+* Tabla PUBLICACION
 *
 * Se refiere a la publicacion de un anuncio 'x' de una promocion 'y'
 * por una empresa 'z'

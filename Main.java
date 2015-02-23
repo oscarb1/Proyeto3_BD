@@ -54,7 +54,7 @@ public class Main {
 			//Promociones
 			Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date2, "Mayores de 15 años", 300, 3, "/imagen/margara","http://www.viajaMarga.com",etiquetas1);
 			Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date2, "De lunes a jueves", 100, 2, "/imagen/sushi","http://www.compraSushi.com",etiquetas2);
-			Promocion promo3 = new Promocion("Viaje Merida Todo incluido", 4000,2000, date,date2, "Mayores de 18 años", 100, 2, "/imagen/merida","http://www.venAMerida.com",etiquetas3);
+			Promocion promo3 = new Promocion("Viaje Merida Todo incluido", 10000,7000, date,date2, "Mayores de 18 años", 100, 2, "/imagen/merida","http://www.venAMerida.com",etiquetas3);
 
 			
 			//Empresas
@@ -100,8 +100,8 @@ public class Main {
 		    //Usuario3 tiene dos amigos
 		    Usuario1.getAmigos().add(Usuario3);
 		    Usuario2.getAmigos().add(Usuario3);
-		    //Usuario3.getAmigos().add(Usuario2);
-		    //Usuario3.getAmigos().add(Usuario1);
+		    Usuario3.getAmigos().add(Usuario2);
+		    Usuario3.getAmigos().add(Usuario1);
 		    
 		    //categoria1 con dos subcategorias
 		    subcategoria2.setSuperCategoria(categoria1);
@@ -115,8 +115,8 @@ public class Main {
 		    //Promo1 tiene 2 categorias
 		    promo3.setCategoria(categoria1);
 		    promo1.setCategoria(categoria1);
-		   
-		    
+		    promo2.setCategoria(categoria2);
+		
 		    session.save(tdc1);
 		    session.save(anuncio);
 		    session.save(Usuario1);
@@ -156,7 +156,13 @@ public class Main {
 		// Etiquetas de la promoción con código 2
 		etiquetas(2);
 		
+		// Lista las promociones según el precio de menor a mayor
 		listarPromocionesPrecio();
+		
+		// Lista las promociones de la categoría pasada como parámetro
+		promocionesEnCategoria("viajes");
+		
+		listarPromocionesRangoPrecio(4000,20000);
 		
 		sessionFactory.close();
 	}
@@ -310,6 +316,7 @@ public class Main {
         		System.out.println("  Monto Ofertado: " 		+ promocion.getMonto_ofertado());
         		System.out.println("  Fecha de Inicio: " 		+ promocion.getFecha_ini());
 	    		System.out.println("  Fecha de Culminación: " 	+ promocion.getFecha_fin());
+	    		System.out.println("  Categoria: " 				+ promocion.getCategoria().getNombre());
 	    		System.out.println("  Condiciones: " 			+ promocion.getCondiciones());
 	    		System.out.println("  + Info a través de : " 	+ promocion.getLink_informacion());
         		System.out.println();
@@ -355,6 +362,7 @@ public class Main {
         		System.out.println("  Monto Ofertado: " 		+ promocion.getMonto_ofertado());
         		System.out.println("  Fecha de Inicio: " 		+ promocion.getFecha_ini());
 	    		System.out.println("  Fecha de Culminación: " 	+ promocion.getFecha_fin());
+	    		System.out.println("  Categoria: " 				+ promocion.getCategoria().getNombre());
 	    		System.out.println("  Condiciones: " 			+ promocion.getCondiciones());
 	    		System.out.println("  + Info a través de : " 	+ promocion.getLink_informacion());
         		System.out.println();
@@ -425,7 +433,84 @@ public class Main {
         		System.out.println("Código de la promoción: " 	+ promocion.getPromoCod()); 
         		System.out.println("Descripción: " 				+ promocion.getDescripcion());
         		System.out.println("Monto Original: " 			+ promocion.getMonto_original());
+        		System.out.println("Monto Ofertado: " 			+ promocion.getMonto_ofertado());;
+        		System.out.println("  Categoria: " 				+ promocion.getCategoria().getNombre());
+        		System.out.println("  Fecha de Inicio: " 		+ promocion.getFecha_ini());
+	    		System.out.println("  Fecha de Culminación: " 	+ promocion.getFecha_fin());
+	    		System.out.println("  Condiciones: " 			+ promocion.getCondiciones());
+	    		System.out.println("  + Info a través de : " 	+ promocion.getLink_informacion());
+        		System.out.println();
+        	}
+		    
+	    	transaction.commit();
+	    } catch (HibernateException e) {
+    		if (transaction!=null) transaction.rollback();
+    		e.printStackTrace(); 
+    		
+	    } finally {
+		    session.close();
+	    }
+	}// fin de procedimiento buscarPromociones
+	
+	public static void promocionesEnCategoria(String nombreCat){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+	    try {
+	    	transaction = session.beginTransaction();
+	    	List<Promocion> listaResultados =  session.createQuery(
+	    			"select p " +
+		    		"from Categoria c " +
+		    		"join c.promociones p " +
+		    		"where c = '" + nombreCat + "'"
+	    			).list();
+	    	
+			System.out.println();
+			System.out.println("Promociones que coinciden con categoría " + nombreCat);
+	    	for (Promocion promocion : listaResultados) {
+        		System.out.println("Código de la promoción: " 	+ promocion.getPromoCod()); 
+        		System.out.println("  Descripción: " 			+ promocion.getDescripcion());
+        		System.out.println("  Monto Original: " 		+ promocion.getMonto_original());
+        		System.out.println("  Monto Ofertado: " 		+ promocion.getMonto_ofertado());
+        		System.out.println("  Fecha de Inicio: " 		+ promocion.getFecha_ini());
+	    		System.out.println("  Fecha de Culminación: " 	+ promocion.getFecha_fin());
+	    		System.out.println("  Condiciones: " 			+ promocion.getCondiciones());
+	    		System.out.println("  + Info a través de : " 	+ promocion.getLink_informacion());
+        		System.out.println();
+        	}
+		    
+	    	transaction.commit();
+	    } catch (HibernateException e) {
+    		if (transaction!=null) transaction.rollback();
+    		e.printStackTrace(); 
+    		
+	    } finally {
+		    session.close();
+	    }
+	}// fin de procedimiento buscarPromociones
+	
+	public static void listarPromocionesRangoPrecio(int min, int max){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+	    try {
+	    	transaction = session.beginTransaction();
+	    	List<Promocion> listaResultados =  session.createQuery(
+	    			"select p " +
+		    		"from Promocion p " +
+		    		"where p.monto_ofertado <= '" + max + "' " +
+		    		"and p.monto_ofertado >= '" + min + "' " +
+		    		"order by (p.monto_ofertado)"
+	    			).list();
+	    	
+			System.out.println();
+			System.out.println("Promociones con monto ofertado entre " + min + " y " + max);
+	    	for (Promocion promocion : listaResultados) {
+        		System.out.println("Código de la promoción: " 	+ promocion.getPromoCod()); 
+        		System.out.println("Descripción: " 				+ promocion.getDescripcion());
+        		System.out.println("Monto Original: " 			+ promocion.getMonto_original());
         		System.out.println("Monto Ofertado: " 			+ promocion.getMonto_ofertado());
+        		System.out.println("  Categoria: " 				+ promocion.getCategoria().getNombre());
         		System.out.println("  Fecha de Inicio: " 		+ promocion.getFecha_ini());
 	    		System.out.println("  Fecha de Culminación: " 	+ promocion.getFecha_fin());
 	    		System.out.println("  Condiciones: " 			+ promocion.getCondiciones());
