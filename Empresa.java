@@ -78,7 +78,7 @@ public Empresa(int rif, String correo, String nombre, int telefono,
 		this.num_clientes = num_clientes;
 	}
 	
-//RElaciones **************************************************
+//Relaciones **************************************************
 //Relacion BRINDA
 @ManyToMany(cascade = {CascadeType.ALL})
 
@@ -88,6 +88,8 @@ public Empresa(int rif, String correo, String nombre, int telefono,
 
 //Lista de categorias que brinda la empresa
 private Set<Categoria> categorias_brinda = new HashSet<Categoria>();
+
+
 	
 	
 // Getters and Setters ***********************************

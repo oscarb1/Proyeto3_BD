@@ -1,14 +1,16 @@
 // Librerías a utilizar **********************************
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Iterator;
-import org.hibernate.Query;
+import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
+
 
 public class Main {
 	 
@@ -20,12 +22,34 @@ public class Main {
 		
 		try {
 			transaction = session.beginTransaction();
-		   //Una fecha para probar
+		   //Fechas
 			Date date = new Date();
 			
+			
+			// Creamos una fecha posterior a la actual para poder asignarla a una tarjeta de crédito
+			String fecha = "25/02/2017";
+			Date date2 = new Date();
+	        try {
+	            SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy");
+	            date2 = df2.parse(fecha);
+	        } catch (java.text.ParseException e) {
+	            e.printStackTrace();
+	        }
+		    
+			// Tarjetas de Credito
+			TarjetaDeCredito tdc1 = new TarjetaDeCredito("4541375325020471", "Reinaldo Verdugo", date2, 332, "MasterCard");
+			
 			//Promociones
-			Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date, "estas son las condi", 300, 3, "/imagen/margara","http://www.viajaMarga.com","etiq");
-			Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date, "estas son las condi sushi", 100, 2, "/imagen/sushi","http://www.compraSushi.com","etiq2");
+			
+			//Etiquetas
+			Set<String> etiquetas1 = new HashSet<String>();
+			Set<String> etiquetas2 = new HashSet<String>();
+			etiquetas1.add("margarita");
+			etiquetas1.add("viajes");
+			etiquetas2.add("comida");
+			etiquetas2.add("japonesa");
+			Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date2, "Mayores de 15 años", 300, 3, "/imagen/margara","http://www.viajaMarga.com",etiquetas1);
+			Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date2, "De lunes a jueves", 100, 2, "/imagen/sushi","http://www.compraSushi.com",etiquetas2);
 		    
 			//Empresas
 			Empresa empresa1 = new Empresa(20613827,"info@vendemosalgo.com","Vendemos Algo",2127628321,"C.A",10);
@@ -52,6 +76,9 @@ public class Main {
 		    
 		    Categoria subcategoria1 = new Categoria("nacionales");
 		    Categoria subcategoria2 = new Categoria("internacionales");
+		    
+		    // Usuario tiene tarjeta de crédito
+		    Usuario1.getTarjetas().add(tdc1);
 		 
 		    //Usuario1 tiene dos promociones adquiridas
 		    Usuario1.getPromociones().add(promo1);
@@ -79,7 +106,7 @@ public class Main {
 		    empresa1.getCategorias_brinda().add(categoria2);
 		    empresa1.getCategorias_brinda().add(categoria3);
 		    
-
+		    session.save(tdc1);
 		    session.save(anuncio);
 		    session.save(Usuario1);
 		    session.save(Usuario2);
@@ -107,8 +134,13 @@ public class Main {
 		// Usuarios que prefieren la categoría viajes
 		usuariosQuePrefierenCategoria("viajes");
 		
+		// Promociones que ofrece la empresa con Rif 20613827
+		promocionesOfrecidasPor(20613827);
 		
+		// Promociones que contienen la etiqueta comida
+		buscarPromociones("comida");
 		
+		etiquetas(2);
 		sessionFactory.close();
 	}
 	
@@ -229,4 +261,132 @@ public class Main {
 	    }
 
 	}
+	
+	/**
+	* promocionesOfrecidasPor
+	*
+	* Procedimiento que dado el username de dos usuarios imprime los amigos en común
+	* entre ellos.
+	* @param user : El username primer usuario
+	* @param user2: El username del segundo usuario
+	*/
+	public static void promocionesOfrecidasPor(int rif){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+	    try {
+	    	transaction = session.beginTransaction();
+	    	List<Promocion> listaResultados =  session.createQuery(
+	    			"select p " +
+		    		"from Promocion p, Publicacion pub " +
+	    			"where pub.empresa = '" + rif +	"' " +
+		    		"and pub.promocion = p"
+		    		
+	    			).list();
+	    	
+			System.out.println();
+			System.out.println("Promociones ofrecidas por la empresa " + rif);
+	    	for (Promocion promocion : listaResultados) {
+        		System.out.println("Código de la promoción: " 	+ promocion.getPromoCod()); 
+        		System.out.println("  Descripción: " 			+ promocion.getDescripcion()); 
+        		System.out.println("  Monto Original: " 		+ promocion.getMonto_original());
+        		System.out.println("  Monto Ofertado: " 		+ promocion.getMonto_ofertado());
+        		System.out.println("  Fecha de Inicio: " 		+ promocion.getFecha_ini());
+	    		System.out.println("  Fecha de Culminación: " 	+ promocion.getFecha_fin());
+	    		System.out.println("  Condiciones: " 			+ promocion.getCondiciones());
+	    		System.out.println("  + Info a través de : " 	+ promocion.getLink_informacion());
+        		System.out.println();
+        	}
+		    
+	    	transaction.commit();
+	    } catch (HibernateException e) {
+    		if (transaction!=null) transaction.rollback();
+    		e.printStackTrace(); 
+    		
+	    } finally {
+		    session.close();
+	    }
+
+	}
+	
+	/**
+	* buscarPromociones
+	*
+	* Procedimiento que dada una etiqueta consigue todas las promociones que
+	* coincidan con la misma
+	* @param etiqueta : Etiqueta que se usará para realizar la búsqueda
+	*/
+	public static void buscarPromociones(String etiqueta){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+	    try {
+	    	transaction = session.beginTransaction();
+	    	List<Promocion> listaResultados =  session.createQuery(
+	    			"select p " +
+		    		"from Promocion p " +
+		    		"join p.etiquetas etiq " +
+	    			"where '" + etiqueta +	"' member of etiq"
+	    			).list();
+	    	
+			System.out.println();
+			System.out.println("Promociones que coinciden con la etiqueta " + etiqueta);
+	    	for (Promocion promocion : listaResultados) {
+        		System.out.println("Código de la promoción: " 	+ promocion.getPromoCod()); 
+        		System.out.println("  Descripción: " 			+ promocion.getDescripcion()); 
+        		System.out.println("  Monto Original: " 		+ promocion.getMonto_original());
+        		System.out.println("  Monto Ofertado: " 		+ promocion.getMonto_ofertado());
+        		System.out.println("  Fecha de Inicio: " 		+ promocion.getFecha_ini());
+	    		System.out.println("  Fecha de Culminación: " 	+ promocion.getFecha_fin());
+	    		System.out.println("  Condiciones: " 			+ promocion.getCondiciones());
+	    		System.out.println("  + Info a través de : " 	+ promocion.getLink_informacion());
+        		System.out.println();
+        	}
+		    
+	    	transaction.commit();
+	    } catch (HibernateException e) {
+    		if (transaction!=null) transaction.rollback();
+    		e.printStackTrace(); 
+    		
+	    } finally {
+		    session.close();
+	    }
+	}
+	    
+	    /**
+		* etiquetas
+		*
+		* Procedimiento que dada una promoción lista todas sus etiquetas
+		* @param etiqueta : Etiqueta que se usará para realizar la búsqueda
+		*/
+		public static void etiquetas(int promocod){
+			SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+			Session session = sessionFac.openSession();
+			Transaction transaction = null;
+		    try {
+		    	transaction = session.beginTransaction();
+		    	List<Promocion> listaResultados =  session.createQuery(
+		    			"select p " +
+			    		"from Promocion p " +
+		    			"where p.promoCod = '" + promocod +	"'"
+		    			).list();
+		    	
+				System.out.println();
+				System.out.print("Etiquetas de la promoción ");
+		    	for (Promocion promocion : listaResultados) {
+		    		System.out.println(promocion.getDescripcion());
+		    		for (String etiqueta : promocion.getEtiquetas()) {
+		    			System.out.println("	Etiqueta: " 	+ etiqueta); 
+		    		}
+	        	}
+			    
+		    	transaction.commit();
+		    } catch (HibernateException e) {
+	    		if (transaction!=null) transaction.rollback();
+	    		e.printStackTrace(); 
+	    		
+		    } finally {
+			    session.close();
+		    }
+		}
 }

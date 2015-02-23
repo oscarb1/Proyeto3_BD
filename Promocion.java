@@ -91,7 +91,8 @@ public class Promocion {
     // Etiqueta(s) de búsqueda que facilita(n) la posibilidad de encontrar 
     // la oferta desde un buscador.
     @Column(name="ETIQUETAS")
-    private String etiquetas;
+    @ElementCollection
+    private Set<String> etiquetas = new HashSet<String>();
     
 
 	//Mapeando desde Meeting, y meeting tiene un set de empleados 
@@ -103,7 +104,7 @@ public class Promocion {
     public Promocion(String descripcion, int monto_original,
 			int monto_ofertado, Date fecha_ini, Date fecha_fin,
 			String condiciones, int cantidad_total, int cantidad_usuario,
-			String imagen, String link_informacion, String etiquetas) {
+			String imagen, String link_informacion, Set<String> etiquetas) {
     	if (fecha_ini.after(fecha_fin)) {
     		throw new IllegalArgumentException("La fecha final no puede ser antes de la fecha inicial");
     	}
@@ -175,11 +176,11 @@ public class Promocion {
 		this.link_informacion = link_informacion;
 	}
 
-	public String getEtiquetas() {
+	public Set<String> getEtiquetas() {
 		return etiquetas;
 	}
 
-	public void setEtiquetas(String etiquetas) {
+	public void setEtiquetas(Set<String> etiquetas) {
 		this.etiquetas = etiquetas;
 	}
 

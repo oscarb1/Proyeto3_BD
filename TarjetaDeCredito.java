@@ -5,15 +5,17 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 
-@Embeddable
+@Entity
+@Table(name = "TARJETA_DE_CREDITO")
 public class TarjetaDeCredito {
 	
-	@Column(name = "NUMBER")
-	@CreditCardNumber( // Chequea que efectivamente sea un número de tarjeta de crédito
-			message = "Debe introducir un número de tarjeta de cŕedito válida") 
-	private String Number; 
+	@Id
+	@Column(name = "NUMERO", nullable = false)
+	@CreditCardNumber(
+			message = "Debe colocar un número de tarjeta válido")
+	private String Numero; 
 	
-	@Column(name = "NOMBRE_TITULAR")
+	@Column(name = "NOMBRE_TITULAR", nullable = false)
 	@Size(
 			max = 25,
 			message = "El nombre del titular de la tarjeta de crédito debe tener máximo {max} caracteres")
@@ -25,24 +27,29 @@ public class TarjetaDeCredito {
 	private Date Fecha_Vencimiento;
 	
 	@Column(name = "CODIGO")
-	@Range(
-			min = 3, 
-			max = 3,
-			message = "El código secreto debe ser de tres dígitos")
 	private int Codigo;
 	
 	@Column(name = "TIPO")
 	@Pattern(regexp = "MasterCard|Visa") // Chequea que la tarjeta sea de tipo MasterCard o Visa
 	private String Tipo;
 	
+	public TarjetaDeCredito(String numero, String titular, Date fecha_venc, int codigo, String tipo) {
+		this.Numero = numero;
+		this.Nombre_Titular = titular;
+		this.Fecha_Vencimiento = fecha_venc;
+		this.Codigo = codigo;
+		this.Tipo = tipo;
+		
+	}
+	
 // Getters and Setters ****************************************************************//
 
-	public String getNumber() {
-		return Number;
+	public String getNumero() {
+		return Numero;
 	}
 
-	public void setNumber(String number) {
-		Number = number;
+	public void setNumero(String number) {
+		Numero = number;
 	}
 
 	public String getNombre_Titular() {
