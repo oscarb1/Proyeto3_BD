@@ -205,6 +205,14 @@ public class Main {
 		
 		// Indida la calificación promedio de una promoción
 		calificacionPromedio(2);
+		
+		//Indica a quienes usuarios ha recomendado el usuario pasado como parámetro
+		usuariosRecomendadosPor("pedroA");
+		
+		// Lista los comentarios de una determinada promoción
+		comentariosDeLaPromo(2);
+		
+		// Se cierra la sesión con la base de datos
 		sessionFactory.close();
 	}
 	
@@ -597,4 +605,66 @@ public class Main {
 		    session.close();
 	    }
 	}// fin de procedimiento calificacionPromedio
+	
+	public static void usuariosRecomendadosPor(String username){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+	    try {
+	    	transaction = session.beginTransaction();
+	    	List<Recomendacion> listaResultados = session.createQuery(
+	    			"select r " +
+		    		"from Recomendacion r " +
+	    			"where r.recomienda = '" + username + "'"		
+	    			).list();
+
+			System.out.println();
+			System.out.println("Usuarios recomendados por  " + username);
+			for (Recomendacion recomendacion : listaResultados) {
+				System.out.println("	Usuario recomendado: " 	+ recomendacion.getRecomendado().getUsername());
+				System.out.println("	Con la promoción: " 	+ recomendacion.getPromocion().getDescripcion()); 
+			}
+	    	transaction.commit();
+	    } catch (HibernateException e) {
+    		if (transaction!=null) transaction.rollback();
+    		e.printStackTrace(); 
+    		
+	    } finally {
+		    session.close();
+	    }
+	}// fin de procedimiento usuariosRecomendadosPor
+	
+	public static void comentariosDeLaPromo(int promoCod){
+		SessionFactory sessionFac = HibernateUtil.getSessionFactory();
+		Session session = sessionFac.openSession();
+		Transaction transaction = null;
+	    try {
+	    	transaction = session.beginTransaction();
+	    	List<Adquiere> listaResultados = session.createQuery(
+	    			"select a " +
+		    		"from Adquiere a " +
+	    			"where a.promocion = '" + promoCod + "'"		
+	    			).list();
+	    	String nombre = (String) session.createQuery(
+	    			"select p.descripcion " +
+	    			"from Promocion p " +
+	    			"where p.promoCod = '" + promoCod + "'"
+	    			).uniqueResult();
+			System.out.println();
+			System.out.println("Comentarios de la promocion " + nombre);
+			for (Adquiere adquisicion : listaResultados) {
+				System.out.println("	Comentario: " 	+ adquisicion.getComentario());
+				System.out.println("	Por usuario: " 	+ adquisicion.getUsuario().getUsername()); 
+			}
+			
+		    
+	    	transaction.commit();
+	    } catch (HibernateException e) {
+    		if (transaction!=null) transaction.rollback();
+    		e.printStackTrace(); 
+    		
+	    } finally {
+		    session.close();
+	    }
+	}// fin de procedimiento comentariosDeLaPromo
 }
