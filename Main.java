@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
+import org.hibernate.Query;
 
 
 public class Main {
@@ -55,7 +56,6 @@ public class Main {
 			Promocion promo1 = new Promocion("Viaje a Margarita", 20000,15000, date,date2, "Mayores de 15 años", 300, 3, "/imagen/margara","http://www.viajaMarga.com",etiquetas1);
 			Promocion promo2 = new Promocion("Sushi 2x1", 4000,2000, date,date2, "De lunes a jueves", 100, 2, "/imagen/sushi","http://www.compraSushi.com",etiquetas2);
 			Promocion promo3 = new Promocion("Viaje Merida Todo incluido", 10000,7000, date,date2, "Mayores de 18 años", 100, 2, "/imagen/merida","http://www.venAMerida.com",etiquetas3);
-
 			
 			//Empresas
 			Empresa empresa1 = new Empresa(20613827,"info@vendemosalgo.com","Vendemos Algo",2127628321,"C.A",10);
@@ -65,7 +65,7 @@ public class Main {
 			
 			//Publicacion
 		    Publicacion publi1 = new Publicacion();
-		    //elenentos de la publicacion
+		    //elementos de la publicacion
 		    publi1.setAnuncio(anuncio);
 		    publi1.setEmpresa(empresa1);
 		    publi1.setPromocion(promo1);
@@ -106,7 +106,7 @@ public class Main {
 		    compra1.setPromocion(promo1);
 		    compra1.setComentario("Genial!");
 		    compra1.setCalificacion(4);
-		
+		    
 		    Adquiere compra2 = new Adquiere();
 		    compra2.setUsuario(Usuario2);
 		    compra2.setPromocion(promo2);
@@ -167,53 +167,73 @@ public class Main {
 		    session.save(recom2);
 		    
 		    transaction.commit();
+		    session.close();
+		    // Patrón state *****************************************
+		    promo1.doAction();
+
+		    publicarPromocion(promo1,empresa1,anuncio);
+		    promo1.doAction();
+		    
+		    promo1.setCantidad_total(0);
+		    promo1.doAction();
+		    
+		    eliminarPromocion(promo1);
+		    promo1.doAction();
+		    
+		    // Si se intenta adquirir una promoción que ya no es válida se generará error
+		    //Adquiere compra4 = new Adquiere();
+		    //compra1.setUsuario(Usuario1);
+		    //compra1.setPromocion(promo1);
+		    //compra1.setComentario("Genial!");
+		    //compra1.setCalificacion(4);
+		    
 		}  catch (HibernateException e) {
 			transaction.rollback();
 			e.printStackTrace();
 			
 		} finally {
-			session.close();
-			
 		}  
 		// Queries ****************************************************** //}
 		// Promociones adquiridas por el usuario 'pedroA'
-		promocionesAdquiridasPor("pedroA");
+		//promocionesAdquiridasPor("pedroA");
 		
 		// Amigos en común entre el usuario 'pedroA' y el usuario 'jose32'
-		amigosEnComun("pedroA","jose32"); 
+		//amigosEnComun("pedroA","jose32"); 
 
 		// Usuarios que prefieren la categoría viajes
-		usuariosQuePrefierenCategoria("viajes");
+		//usuariosQuePrefierenCategoria("viajes");
 		
 		// Promociones que ofrece la empresa con Rif 20613827
-		promocionesOfrecidasPor(20613827);
+		//promocionesOfrecidasPor(20613827);
 		
 		// Promociones que contienen la etiqueta comida
-		buscarPromociones("comida");
+		//buscarPromociones("comida");
 		
 		// Etiquetas de la promoción con código 2
-		etiquetas(2);
+		//etiquetas(2);
 		
 		// Lista las promociones según el precio de menor a mayor
-		listarPromocionesPrecio();
+		//listarPromocionesPrecio();
 		
 		// Lista las promociones de la categoría pasada como parámetro
-		promocionesEnCategoria("viajes");
+		//promocionesEnCategoria("viajes");
 		
 		// Lista las promociones entre un rango de precios definido
-		listarPromocionesRangoPrecio(4000,20000);
+		//listarPromocionesRangoPrecio(4000,20000);
 		
 		// Indida la calificación promedio de una promoción
-		calificacionPromedio(2);
+		//calificacionPromedio(2);
 		
 		//Indica a quienes usuarios ha recomendado el usuario pasado como parámetro
-		usuariosRecomendadosPor("pedroA");
+		//usuariosRecomendadosPor("pedroA");
 		
 		// Lista los comentarios de una determinada promoción
-		comentariosDeLaPromo(2);
+		//comentariosDeLaPromo(2);
 		
 		// Se cierra la sesión con la base de datos
 		sessionFactory.close();
+		
+		
 	}
 	
 	/**
@@ -667,4 +687,36 @@ public class Main {
 		    session.close();
 	    }
 	}// fin de procedimiento comentariosDeLaPromo
+	
+	public static void publicarPromocion(Promocion promo, Empresa emp, Anuncio anuncio) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		
+		try{
+        	transaction = session.beginTransaction();
+		// Publicacion
+	    Publicacion publi1 = new Publicacion();
+	    
+	    // Elementos de la publicacion
+	    publi1.setAnuncio(anuncio);
+	    publi1.setEmpresa(emp);
+	    publi1.setPromocion(promo);
+	    
+	    // Se crea la publicacion
+	    session.save(publi1);
+	    transaction.commit();
+        } catch (HibernateException e) {
+        	if (transaction!=null) transaction.rollback();
+        	e.printStackTrace(); 
+        } finally {
+        	session.close(); 
+        }
+		promo.setVisualizada(true);
+	}
+	
+	// Si se elimina sin ser publicada tendrá el estado Cancelada
+	// Si se elimina luego de haber sido publicado tendrá el estado Eliminada
+    public static void eliminarPromocion(Promocion promo){
+        promo.setValida(false);
+    }
 }

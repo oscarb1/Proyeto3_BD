@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
+
  
 /**
 * Clase Promocion 
@@ -94,6 +95,17 @@ public class Promocion {
     @ElementCollection
     private Set<String> etiquetas = new HashSet<String>();
     
+    // Estado de visualización de la promoción
+    @Transient
+	private boolean visualizada = false;
+    
+    @Transient
+	private boolean valida = true;
+	
+    @Transient
+    private State estado = new StateCreada();
+
+    
     // Constructor de la clase 
     public Promocion(String descripcion, int monto_original,
 			int monto_ofertado, Date fecha_ini, Date fecha_fin,
@@ -113,6 +125,9 @@ public class Promocion {
 		this.imagen = imagen;
 		this.link_informacion = link_informacion;
 		this.etiquetas = etiquetas;
+		this.estado = new StateCreada();
+		this.visualizada = false;
+		this.valida = true;
 	} // Cierre del constructor
 
     protected Promocion(){}
@@ -126,9 +141,6 @@ public class Promocion {
    @ManyToOne //Significa que estoy mapeando de muchos a uno, porque el empleado trabaja en 1 dpto
    @JoinColumn(name="categoria_nombre") //La columna por la que hace Join es department_id
    private Categoria categoria;
-
-
-    
  
 
 // Getters and Setters **********************************************//
@@ -253,5 +265,34 @@ public class Promocion {
 		}
 		this.fecha_fin = fecha_fin;
 	}
+
+	public State getEstado() {
+		return estado;
+	}
+
+	public void setEstado(State estado) {
+		this.estado = estado;
+	}
+	
+	public void doAction() {
+    	estado.doAction(this);
+    }
+
+	public boolean isVisualizada() {
+		return visualizada;
+	}
+
+	public void setVisualizada(boolean visualizada) {
+		this.visualizada = visualizada;
+	}
+
+	public boolean isValida() {
+		return valida;
+	}
+
+	public void setValida(boolean valida) {
+		this.valida = valida;
+	}
+	
    
 }

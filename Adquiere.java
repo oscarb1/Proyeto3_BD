@@ -1,6 +1,9 @@
 import javax.persistence.*;
 import javax.validation.constraints.*;
-
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 /**
 * Clase Publicacion
 * Tabla PUBLICACION
@@ -10,6 +13,7 @@ import javax.validation.constraints.*;
 */
 @Entity
 @Table(name="ADQUIERE")
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class Adquiere {
 	// Código único que sirve para identificar a una adquisición o compra 
     @Id
@@ -27,10 +31,12 @@ public class Adquiere {
     		max = 500)
     private String Comentario;
     
-	@OneToOne //Promocion publicada por una empresa
+    @OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToOne (orphanRemoval = true) //Promocion publicada por una empresa
 	private Usuario usuario;
 	
-	@OneToOne //Empresa que publica la promocion
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToOne (orphanRemoval = true) //Empresa que publica la promocion
 	private Promocion promocion;
 
 	// Getters and Setters *****************************************************// 
@@ -64,6 +70,7 @@ public class Adquiere {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+		
 	}
 
 	public Promocion getPromocion() {
@@ -71,6 +78,9 @@ public class Adquiere {
 	}
 
 	public void setPromocion(Promocion promocion) {
+		if (!promocion.isValida()) {
+			throw new IllegalArgumentException("No se puede adquirir una promoción cancelada o eliminada");
+		}
 		this.promocion = promocion;
 	}
 	

@@ -41,6 +41,8 @@
         <mapping class="Publicacion"/>
         <mapping class="Recomendacion"/>
         <mapping class="Adquiere"/>
+        <mapping class="State"/>
+        <mapping class="StateCreada"/>
  
     </session-factory>
 

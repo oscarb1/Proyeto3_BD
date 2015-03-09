@@ -22,11 +22,11 @@ public class Publicacion {
 	    @GeneratedValue
 	    private int PUBLICOD;
 
-		@OneToOne //Promocion publicada por una empresa
+		@OneToOne(cascade = {CascadeType.ALL}) //Promocion publicada por una empresa
 		private Promocion promocion;
-		@OneToOne //Empresa que publica la promocion
+		@OneToOne(cascade = {CascadeType.ALL}) //Empresa que publica la promocion
 		private Empresa empresa;
-		@OneToOne //Una promocion puede tener solo un Anuncio
+		@OneToOne(cascade = {CascadeType.ALL}) //Una promocion puede tener solo un Anuncio
 		private Anuncio anuncio;
 		
 // Getters and Setters *******************************************	
